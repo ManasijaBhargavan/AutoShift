@@ -2,35 +2,22 @@ import React, { useState , useEffect } from 'react';
 import { Check, X, Star, Calendar, ChevronRight } from 'lucide-react';
 
 // --- Constants ---
-const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const TIME_SLOTS = [
-  "8:00 AM",
-  "8:30 AM",
-  "9:00 AM",
-  "9:30 AM",
-  "10:00 AM",
-  "10:30 AM",
-  "11:00 AM",
-  "11:30 AM",
-  "12:00 PM",
-  "12:30 PM",
-  "1:00 PM",
-  "1:30 PM",
-  "2:00 PM",
-  "2:30 PM",
-  "3:00 PM",
-  "3:30 PM",
-  "4:00 PM",
-  "4:30 PM",
-  "5:00 PM",
-  "5:30 PM",
-  "6:00 PM",
-  "6:30 PM",
-  "7:00 PM",
-  "7:30 PM",
-  "8:00 PM"
-]
-;
+  "08:00", "08:30",
+  "09:00", "09:30",
+  "10:00", "10:30",
+  "11:00", "11:30",
+  "12:00", "12:30",
+  "13:00", "13:30",
+  "14:00", "14:30",
+  "15:00", "15:30",
+  "16:00", "16:30",
+  "17:00", "17:30",
+  "18:00", "18:30",
+  "19:00", "19:30",
+  "20:00"
+];
 
 // Status Definitions
 const STATUS_CONFIG = {
@@ -94,6 +81,81 @@ const getNextStatus = (currentStatus) => {
   // Prevent default drag behavior (like selecting text)
   const preventDragHandler = (e) => {
     e.preventDefault();
+  };
+
+const handleDownload = () => {
+    // 1. Helper to add minutes to a time string "08:00" + 30 -> "08:30"
+    const addMinutes = (timeStr, minsToAdd) => {
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      const date = new Date();
+      date.setHours(hours, minutes + minsToAdd);
+      return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    };
+
+    // 2. The Logic to merge consecutive slots
+    const getRangesForStatus = (day, targetStatus) => {
+      const ranges = [];
+      let startTime = null;
+      let lastSlotTime = null;
+
+      // Iterate through every slot in order
+      for (let i = 0; i < TIME_SLOTS.length; i++) {
+        const time = TIME_SLOTS[i];
+        const key = `${day}-${time}`;
+        // Default to 'available' if not clicked
+        const currentStatus = schedule[key] || 'available';
+
+        if (currentStatus === targetStatus) {
+          // If this is the start of a streak
+          if (!startTime) {
+            startTime = time;
+          }
+          // Keep track of the most recent slot in this streak
+          lastSlotTime = time;
+        } else {
+          // The streak ended (or never started)
+          if (startTime) {
+            // Close the previous range. 
+            // End time = last slot + duration (e.g., 8:30 + 30m = 9:00)
+            const endTime = addMinutes(lastSlotTime, 30);
+            ranges.push(`${startTime}-${endTime}`);
+            
+            // Reset
+            startTime = null;
+            lastSlotTime = null;
+          }
+        }
+      }
+
+      // Edge Case: If the streak goes all the way to the end of the day
+      if (startTime) {
+        const endTime = addMinutes(lastSlotTime, 30);
+        ranges.push(`${startTime}-${endTime}`);
+      }
+
+      return ranges;
+    };
+
+    // 3. Build the final object
+    const formattedData = {};
+
+    DAYS.forEach(day => {
+      formattedData[day] = {
+        unavailable: getRangesForStatus(day, 'unavailable'),
+        preferred: getRangesForStatus(day, 'preferred')
+      };
+    });
+
+    // 4. Download
+    const fileData = JSON.stringify(formattedData, null, 2);
+    const blob = new Blob([fileData], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "shift_preferences.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -185,7 +247,7 @@ const getNextStatus = (currentStatus) => {
           </div>
           <button 
             className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-colors shadow-lg shadow-indigo-200"
-            onClick={() => console.log(schedule)}
+            onClick={handleDownload}
           >
             Submit Availability <ChevronRight size={18} />
           </button>
