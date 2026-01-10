@@ -1,0 +1,1624 @@
+[
+  {
+    "day": "Monday",
+    "hours": [
+      {
+        "time": "09:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "10:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "11:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "12:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "13:00",
+        "roles": {
+          "Busser": [
+            "Cody"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Cody"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Frank"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Frank"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "20:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "21:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "day": "Tuesday",
+    "hours": [
+      {
+        "time": "09:00",
+        "roles": {
+          "Busser": [
+            "Evan"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Bella"
+          ]
+        }
+      },
+      {
+        "time": "10:00",
+        "roles": {
+          "Busser": [
+            "Evan"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Bella"
+          ]
+        }
+      },
+      {
+        "time": "11:00",
+        "roles": {
+          "Busser": [
+            "Evan"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Grace"
+          ]
+        }
+      },
+      {
+        "time": "12:00",
+        "roles": {
+          "Busser": [
+            "Evan"
+          ],
+          "Cook": [
+            "Daisy"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Grace"
+          ]
+        }
+      },
+      {
+        "time": "13:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Daisy"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Grace"
+          ]
+        }
+      },
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Daisy"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Uma"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Uma"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Grace"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Grace"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Yara"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Yara"
+          ]
+        }
+      },
+      {
+        "time": "20:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Bob"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Yara"
+          ]
+        }
+      },
+      {
+        "time": "21:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Bob"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Yara"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "day": "Wednesday",
+    "hours": [
+      {
+        "time": "09:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Grace"
+          ]
+        }
+      },
+      {
+        "time": "10:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Grace"
+          ]
+        }
+      },
+      {
+        "time": "11:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Grace"
+          ]
+        }
+      },
+      {
+        "time": "12:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Bella"
+          ]
+        }
+      },
+      {
+        "time": "13:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Bella"
+          ]
+        }
+      },
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Uma"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Uma"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Frank"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Uma"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Frank"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Uma"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Leo"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Leo"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "20:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Uma"
+          ]
+        }
+      },
+      {
+        "time": "21:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Uma"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "day": "Thursday",
+    "hours": [
+      {
+        "time": "09:00",
+        "roles": {
+          "Busser": [
+            "Cody"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "10:00",
+        "roles": {
+          "Busser": [
+            "Cody"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "11:00",
+        "roles": {
+          "Busser": [
+            "Cody"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "12:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "13:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Daisy"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Daisy"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Cody"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Cody"
+          ],
+          "Cook": [
+            "Xander"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Xander"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "20:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "21:00",
+        "roles": {
+          "Busser": [
+            "Vince"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "day": "Friday",
+    "hours": [
+      {
+        "time": "09:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Nate"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "10:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Nate"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "11:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Nate"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "12:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Xander"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "13:00",
+        "roles": {
+          "Busser": [
+            "Evan"
+          ],
+          "Cook": [
+            "Xander"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Evan"
+          ],
+          "Cook": [
+            "Xander"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Evan"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Cody"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Leo",
+            "Vince",
+            "Cody"
+          ],
+          "Cook": [
+            "Jack",
+            "Riley",
+            "Tara"
+          ],
+          "Manager": [
+            "Diana",
+            "Ivy",
+            "Paul"
+          ],
+          "Server": [
+            "Alice",
+            "Mona",
+            "Bella"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Leo",
+            "Vince"
+          ],
+          "Cook": [
+            "Jack",
+            "Tara"
+          ],
+          "Manager": [
+            "Ivy",
+            "Paul"
+          ],
+          "Server": [
+            "Mona",
+            "Bella"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Hank",
+            "Vince"
+          ],
+          "Cook": [
+            "Riley",
+            "Xander"
+          ],
+          "Manager": [
+            "Ivy",
+            "Wendy"
+          ],
+          "Server": [
+            "Alice",
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "20:00",
+        "roles": {
+          "Busser": [
+            "Hank",
+            "Vince",
+            "Zane"
+          ],
+          "Cook": [
+            "Bob",
+            "Riley",
+            "Xander"
+          ],
+          "Manager": [
+            "Ivy",
+            "Paul",
+            "Wendy"
+          ],
+          "Server": [
+            "Alice",
+            "Kara",
+            "Yara"
+          ]
+        }
+      },
+      {
+        "time": "21:00",
+        "roles": {
+          "Busser": [
+            "Zane"
+          ],
+          "Cook": [
+            "Bob"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Yara"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "day": "Saturday",
+    "hours": [
+      {
+        "time": "09:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "10:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "11:00",
+        "roles": {
+          "Busser": [
+            "Zane"
+          ],
+          "Cook": [
+            "Xander"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Sam"
+          ]
+        }
+      },
+      {
+        "time": "12:00",
+        "roles": {
+          "Busser": [
+            "Evan",
+            "Leo",
+            "Zane"
+          ],
+          "Cook": [
+            "Jack",
+            "Nate",
+            "Xander"
+          ],
+          "Manager": [
+            "Diana",
+            "Paul",
+            "Wendy"
+          ],
+          "Server": [
+            "Mona",
+            "Oscar",
+            "Sam"
+          ]
+        }
+      },
+      {
+        "time": "13:00",
+        "roles": {
+          "Busser": [
+            "Evan",
+            "Leo",
+            "Zane"
+          ],
+          "Cook": [
+            "Bob",
+            "Jack",
+            "Nate"
+          ],
+          "Manager": [
+            "Diana",
+            "Paul",
+            "Wendy"
+          ],
+          "Server": [
+            "Charlie",
+            "Mona",
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Leo"
+          ],
+          "Cook": [
+            "Bob"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Charlie"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Zane"
+          ],
+          "Cook": [
+            "Bob"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Sam"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Zane"
+          ],
+          "Cook": [
+            "Frank"
+          ],
+          "Manager": [
+            "Ivy"
+          ],
+          "Server": [
+            "Sam"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Zane"
+          ],
+          "Cook": [
+            "Frank"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Yara"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Zane"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Yara"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Riley"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Yara"
+          ]
+        }
+      },
+      {
+        "time": "20:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Yara"
+          ]
+        }
+      },
+      {
+        "time": "21:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Yara"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "day": "Sunday",
+    "hours": [
+      {
+        "time": "09:00",
+        "roles": {
+          "Busser": [
+            "Zane"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "10:00",
+        "roles": {
+          "Busser": [
+            "Zane"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Oscar"
+          ]
+        }
+      },
+      {
+        "time": "11:00",
+        "roles": {
+          "Busser": [
+            "Zane"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "12:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "13:00",
+        "roles": {
+          "Busser": [
+            "Quinn"
+          ],
+          "Cook": [
+            "Tara"
+          ],
+          "Manager": [
+            "Diana"
+          ],
+          "Server": [
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Frank"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Kara"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Hank"
+          ],
+          "Cook": [
+            "Frank"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Leo"
+          ],
+          "Cook": [
+            "Bob"
+          ],
+          "Manager": [
+            "Wendy"
+          ],
+          "Server": [
+            "Mona"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Leo"
+          ],
+          "Cook": [
+            "Bob"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Sam"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Evan"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Sam"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Evan"
+          ],
+          "Cook": [
+            "Jack"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "20:00",
+        "roles": {
+          "Busser": [
+            "Cody"
+          ],
+          "Cook": [
+            "Aaron"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "21:00",
+        "roles": {
+          "Busser": [
+            "Cody"
+          ],
+          "Cook": [
+            "Aaron"
+          ],
+          "Manager": [
+            "Paul"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      }
+    ]
+  }
+]
