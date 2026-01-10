@@ -1,0 +1,72 @@
+{
+    "employee_data" : [{
+        "name": "Alice",
+        "role": "Server",
+        "max_hours": 40,
+        "availability": {
+            "Monday": {"unavailable": ["08:00-12:00"], "preferred": ["17:00-22:00"]},
+            "Tuesday": {"unavailable": [], "preferred": ["17:00-22:00"]},
+            "Wednesday": {"unavailable": [], "preferred": ["17:00-22:00"]},
+            "Thursday": {"unavailable": ["08:00-10:00", "14:00-15:00"], "preferred": ["16:00-22:00"]},
+            "Friday": {"unavailable": [], "preferred": ["12:00-22:00"]},
+            "Saturday": {"unavailable": [], "preferred": ["00:00-23:59"]},
+            "Sunday": {"unavailable": [], "preferred": ["00:00-23:59"]}
+        }
+    },
+    {
+        "name": "Bob",
+        "role": "Cook",
+        "max_hours": 35,
+        "availability": {
+            "Monday": {"unavailable": [], "preferred": ["06:00-14:00"]},
+            "Tuesday": {"unavailable": ["14:00-16:00"], "preferred": []},
+            "Wednesday": {"unavailable": [], "preferred": ["00:00-23:59"]},
+            "Thursday": {"unavailable": [], "preferred": ["06:00-14:00"]},
+            "Friday": {"unavailable": ["15:00-18:00"], "preferred": ["06:00-14:00"]},
+            "Saturday": {"unavailable": [], "preferred": []},
+            "Sunday": {"unavailable": [], "preferred": ["10:00-18:00"]}
+        }
+    },
+    {
+        "name": "Charlie",
+        "role": "Server",
+        "max_hours": 20,
+        "availability": {
+            "Monday": {"unavailable": ["00:00-23:59"], "preferred": []},
+            "Tuesday": {"unavailable": ["00:00-23:59"], "preferred": []},
+            "Wednesday": {"unavailable": ["00:00-23:59"], "preferred": []},
+            "Thursday": {"unavailable": ["00:00-23:59"], "preferred": []},
+            "Friday": {"unavailable": ["00:00-23:59"], "preferred": []},
+            "Saturday": {"unavailable": ["18:00-23:00"], "preferred": []},
+            "Sunday": {"unavailable": ["10:00-20:00"], "preferred": []}
+        }
+    },
+    {
+        "name": "Diana",
+        "role": "Manager",
+        "max_hours": 45,
+        "availability": {
+            "Monday": {"unavailable": ["09:00-10:00"], "preferred": []},
+            "Tuesday": {"unavailable": ["09:00-10:00"], "preferred": []},
+            "Wednesday": {"unavailable": ["09:00-10:00"], "preferred": []},
+            "Thursday": {"unavailable": ["09:00-10:00"], "preferred": []},
+            "Friday": {"unavailable": ["09:00-10:00"], "preferred": []},
+            "Saturday": {"unavailable": [], "preferred": []},
+            "Sunday": {"unavailable": [], "preferred": ["00:00-23:59"]}
+        }
+    },
+    {
+        "name": "Evan",
+        "role": "Busser",
+        "max_hours": 15,
+        "availability": {
+            "Monday": {"unavailable": ["08:00-12:00", "13:00-15:00"], "preferred": ["18:00-22:00"]},
+            "Tuesday": {"unavailable": [], "preferred": ["18:00-22:00"]},
+            "Wednesday": {"unavailable": [], "preferred": ["18:00-22:00"]},
+            "Thursday": {"unavailable": [], "preferred": []},
+            "Friday": {"unavailable": ["17:00-23:00"], "preferred": []},
+            "Saturday": {"unavailable": [], "preferred": []},
+            "Sunday": {"unavailable": [], "preferred": []}
+        }
+    }]
+}
