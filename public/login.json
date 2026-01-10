@@ -1,0 +1,8 @@
+{
+  "employerPassword": "employer-secret",
+  "employees": [
+    { "name": "Alice", "password": "alicepass" },
+    { "name": "Bob", "password": "bobpass" },
+    { "name": "Charlie", "password" : "charliepass" }
+  ]
+}
