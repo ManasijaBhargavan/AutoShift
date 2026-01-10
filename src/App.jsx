@@ -73,7 +73,7 @@ const getNextStatus = (currentStatus) => {
 
   const handleMouseDown = (day, time) => {
     const key = `${day}-${time}`;
-    const currentStatus = schedule[key] || 'unavailable';
+    const currentStatus = schedule[key] || 'available';
     const nextStatus = getNextStatus(currentStatus);
     
     setIsDragging(true);
@@ -95,19 +95,6 @@ const getNextStatus = (currentStatus) => {
   const preventDragHandler = (e) => {
     e.preventDefault();
   };
-
-  // Helper to toggle status: Unavailable -> Available -> Preferred -> Unavailable
-  /*const toggleStatus = (day, time) => {
-    const key = `${day}-${time}`;
-    const currentStatus = schedule[key] || 'available';
-    
-    let nextStatus;
-    if (currentStatus === 'unavailable') nextStatus = 'preferred';
-    else if (currentStatus === 'available') nextStatus = 'unavailable';
-    else nextStatus = 'available';
-
-    setSchedule({ ...schedule, [key]: nextStatus });
-  };*/
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans p-8">
@@ -194,7 +181,7 @@ const getNextStatus = (currentStatus) => {
         {/* Footer Actions */}
         <div className="bg-slate-50 p-6 flex justify-between items-center border-t border-slate-100">
           <div className="text-slate-500 text-sm">
-            {Object.values(schedule).filter(s => s !== 'unavailable').length} shifts selected
+            {(DAYS.length * TIME_SLOTS.length) - Object.values(schedule).filter(s => s === 'unavailable').length} shifts selected
           </div>
           <button 
             className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-colors shadow-lg shadow-indigo-200"
