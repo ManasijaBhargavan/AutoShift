@@ -1,9 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { Check, X, Star, Calendar, ChevronRight } from 'lucide-react';
 
 // --- Constants ---
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const TIME_SLOTS = ['Morning (8-12)', 'Afternoon (12-4)', 'Evening (4-8)'];
+const TIME_SLOTS = [
+  "8:00 AM",
+  "8:30 AM",
+  "9:00 AM",
+  "9:30 AM",
+  "10:00 AM",
+  "10:30 AM",
+  "11:00 AM",
+  "11:30 AM",
+  "12:00 PM",
+  "12:30 PM",
+  "1:00 PM",
+  "1:30 PM",
+  "2:00 PM",
+  "2:30 PM",
+  "3:00 PM",
+  "3:30 PM",
+  "4:00 PM",
+  "4:30 PM",
+  "5:00 PM",
+  "5:30 PM",
+  "6:00 PM",
+  "6:30 PM",
+  "7:00 PM",
+  "7:30 PM",
+  "8:00 PM"
+]
+;
 
 // Status Definitions
 const STATUS_CONFIG = {
@@ -28,9 +55,49 @@ const App = () => {
   // State to hold the grid data
   // Structure: { "Mon-Morning (8-12)": "available", ... }
   const [schedule, setSchedule] = useState({});
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartStatus, setDragStartStatus] = useState(null); // What status are we applying?
+
+  // Stop dragging if user releases mouse anywhere on the screen
+  useEffect(() => {
+    const handleGlobalMouseUp = () => setIsDragging(false);
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+    return () => window.removeEventListener('mouseup', handleGlobalMouseUp);
+  }, []);
+
+const getNextStatus = (currentStatus) => {
+    if (currentStatus === 'unavailable') return 'available';
+    if (currentStatus === 'available') return 'preferred';
+    return 'unavailable';
+  };
+
+  const handleMouseDown = (day, time) => {
+    const key = `${day}-${time}`;
+    const currentStatus = schedule[key] || 'unavailable';
+    const nextStatus = getNextStatus(currentStatus);
+    
+    setIsDragging(true);
+    setDragStartStatus(nextStatus); // "Lock in" the intention of this drag
+    
+    // Update the first cell immediately
+    setSchedule(prev => ({ ...prev, [key]: nextStatus }));
+  };
+
+  const handleMouseEnter = (day, time) => {
+    if (!isDragging) return;
+
+    const key = `${day}-${time}`;
+    // Only apply the status determined at the start of the drag
+    setSchedule(prev => ({ ...prev, [key]: dragStartStatus }));
+  };
+
+  // Prevent default drag behavior (like selecting text)
+  const preventDragHandler = (e) => {
+    e.preventDefault();
+  };
 
   // Helper to toggle status: Unavailable -> Available -> Preferred -> Unavailable
-  const toggleStatus = (day, time) => {
+  /*const toggleStatus = (day, time) => {
     const key = `${day}-${time}`;
     const currentStatus = schedule[key] || 'available';
     
@@ -40,7 +107,7 @@ const App = () => {
     else nextStatus = 'available';
 
     setSchedule({ ...schedule, [key]: nextStatus });
-  };
+  };*/
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans p-8">
@@ -70,48 +137,53 @@ const App = () => {
       </div>
 
       {/* Main Grid Card */}
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+      <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
         <div className="p-8">
           
           {/* Grid Layout */}
-          <div className="grid grid-cols-[100px_repeat(3,1fr)] gap-4">
+          <div className="grid grid-cols-[80px_repeat(7,1fr)] gap-4">
             
             {/* Header Row */}
             <div className="font-bold text-slate-400 uppercase text-xs tracking-wider self-center">Day</div>
-            {TIME_SLOTS.map((time) => (
-              <div key={time} className="text-center font-semibold text-slate-700 pb-2 border-b border-slate-100">
-                {time}
+            {DAYS.map((day) => (
+              <div key={day} className="text-center font-semibold text-slate-700 pb-2 border-b border-slate-100">
+                {day}
               </div>
             ))}
 
             {/* Rows */}
-            {DAYS.map((day) => (
-              <React.Fragment key={day}>
+            {TIME_SLOTS.map((time) => (
+              <React.Fragment key={time}>
                 {/* Day Label */}
-                <div className="font-bold text-slate-600 self-center">{day}</div>
+                <div className="font-bold text-slate-600 self-center">{time}</div>
                 
                 {/* Time Slots */}
-                {TIME_SLOTS.map((time) => {
+                {DAYS.map((day) => {
                   const key = `${day}-${time}`;
                   const status = schedule[key] || 'available';
                   const config = STATUS_CONFIG[status];
 
                   return (
-                    <button
+                    <div
                       key={key}
-                      onClick={() => toggleStatus(day, time)}
+
+                      onDragStart={preventDragHandler}
+
+                      onMouseDown={() => handleMouseDown(day, time)}
+                      onMouseEnter={() => handleMouseEnter(day, time)}
+
                       className={`
-                        h-16 rounded-lg border-2 transition-all duration-200 
-                        flex flex-col items-center justify-center gap-1
+                        h-16 rounded-lg border-2 transition-all duration-100 cursor-pointer
+                        flex flex-col items-center justify-center gap-1 select-none
                         ${config.color}
-                        active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                        ${isDragging ? 'hover:scale-95' : 'hover:scale-105'}
                       `}
                     >
-                      <div className="opacity-80">{config.icon}</div>
-                      <span className="text-xs font-semibold uppercase tracking-wider">
+                      <div className="opacity-80 pointer-events-none">{config.icon}</div>
+                      <span className="text-xs font-semibold uppercase tracking-wider pointer-events-none">
                         {status}
                       </span>
-                    </button>
+                    </div>
                   );
                 })}
               </React.Fragment>
