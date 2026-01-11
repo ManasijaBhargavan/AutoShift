@@ -1,27 +1,27 @@
 {
-    "constraints": {
-      "min_shift_length": 2,
-      "max_shift_length": 8,
-      "daily_max_hours": 10,
-      "global_staff_floor": 1,
-      "business_hours": {
-        "start": 9,
-        "end": 22
-      }
+  "constraints": {
+    "min_shift_length": 2,
+    "max_shift_length": 8,
+    "daily_max_hours": 10,
+    "global_staff_floor": 1,
+    "business_hours": {
+      "start": 10,
+      "end": 16
+    }
+  },
+  "demand": {
+    "Monday": {},
+    "Friday": {
+      "17": 3,
+      "18": 2,
+      "19": 2,
+      "20": 3
     },
-    "demand": {
-      "Monday": {},
-      "Friday": {
-        "17": 3,
-        "18": 2,
-        "19": 2,
-        "20": 3
-      },
-      "Saturday": {
-        "12": 3,
-        "13": 3,
-        "18": 1,
-        "19": 1
-      }
+    "Saturday": {
+      "12": 3,
+      "13": 3,
+      "18": 1,
+      "19": 1
     }
   }
+}

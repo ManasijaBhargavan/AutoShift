@@ -1,0 +1,55 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main  # Only deploy when pushing to main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Build Frontend
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy to Azure via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AZURE_IP }}
+          username: ${{ secrets.AZURE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Create a temp folder
+            mkdir -p ~/deploy_tmp
+            
+      - name: Upload Build Files
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.AZURE_IP }}
+          username: ${{ secrets.AZURE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "dist/*"
+          target: "~/deploy_tmp"
+          strip_components: 1
+
+      - name: Move Files to Final Location
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AZURE_IP }}
+          username: ${{ secrets.AZURE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Move from temp to the folder Nginx is watching
+            rm -rf ~/dist/*
+            cp -r ~/deploy_tmp/* ~/dist/
+            rm -rf ~/deploy_tmp

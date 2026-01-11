@@ -3,36 +3,19 @@
     "day": "Monday",
     "hours": [
       {
-        "time": "09:00",
-        "roles": {
-          "Busser": [
-            "Vince"
-          ],
-          "Cook": [
-            "Jack"
-          ],
-          "Manager": [
-            "Wendy"
-          ],
-          "Server": [
-            "Mona"
-          ]
-        }
-      },
-      {
         "time": "10:00",
         "roles": {
           "Busser": [
-            "Vince"
+            "Cody"
           ],
           "Cook": [
-            "Jack"
+            "Xander"
           ],
           "Manager": [
-            "Wendy"
+            "Ivy"
           ],
           "Server": [
-            "Mona"
+            "Kara"
           ]
         }
       },
@@ -40,16 +23,16 @@
         "time": "11:00",
         "roles": {
           "Busser": [
-            "Vince"
+            "Cody"
           ],
           "Cook": [
-            "Riley"
+            "Xander"
           ],
           "Manager": [
             "Ivy"
           ],
           "Server": [
-            "Mona"
+            "Kara"
           ]
         }
       },
@@ -57,16 +40,16 @@
         "time": "12:00",
         "roles": {
           "Busser": [
-            "Vince"
+            "Quinn"
           ],
           "Cook": [
-            "Riley"
+            "Jack"
           ],
           "Manager": [
             "Ivy"
           ],
           "Server": [
-            "Oscar"
+            "Alice"
           ]
         }
       },
@@ -74,7 +57,7 @@
         "time": "13:00",
         "roles": {
           "Busser": [
-            "Cody"
+            "Quinn"
           ],
           "Cook": [
             "Jack"
@@ -83,7 +66,7 @@
             "Ivy"
           ],
           "Server": [
-            "Oscar"
+            "Alice"
           ]
         }
       },
@@ -91,7 +74,7 @@
         "time": "14:00",
         "roles": {
           "Busser": [
-            "Cody"
+            "Quinn"
           ],
           "Cook": [
             "Jack"
@@ -100,7 +83,7 @@
             "Ivy"
           ],
           "Server": [
-            "Kara"
+            "Grace"
           ]
         }
       },
@@ -108,118 +91,16 @@
         "time": "15:00",
         "roles": {
           "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Frank"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Kara"
-          ]
-        }
-      },
-      {
-        "time": "16:00",
-        "roles": {
-          "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Frank"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Oscar"
-          ]
-        }
-      },
-      {
-        "time": "17:00",
-        "roles": {
-          "Busser": [
             "Quinn"
           ],
           "Cook": [
-            "Riley"
+            "Jack"
           ],
           "Manager": [
-            "Paul"
+            "Ivy"
           ],
           "Server": [
-            "Oscar"
-          ]
-        }
-      },
-      {
-        "time": "18:00",
-        "roles": {
-          "Busser": [
-            "Quinn"
-          ],
-          "Cook": [
-            "Riley"
-          ],
-          "Manager": [
-            "Diana"
-          ],
-          "Server": [
-            "Kara"
-          ]
-        }
-      },
-      {
-        "time": "19:00",
-        "roles": {
-          "Busser": [
-            "Quinn"
-          ],
-          "Cook": [
-            "Tara"
-          ],
-          "Manager": [
-            "Diana"
-          ],
-          "Server": [
-            "Kara"
-          ]
-        }
-      },
-      {
-        "time": "20:00",
-        "roles": {
-          "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Tara"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Mona"
-          ]
-        }
-      },
-      {
-        "time": "21:00",
-        "roles": {
-          "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Tara"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Mona"
+            "Grace"
           ]
         }
       }
@@ -229,23 +110,6 @@
     "day": "Tuesday",
     "hours": [
       {
-        "time": "09:00",
-        "roles": {
-          "Busser": [
-            "Evan"
-          ],
-          "Cook": [
-            "Riley"
-          ],
-          "Manager": [
-            "Ivy"
-          ],
-          "Server": [
-            "Bella"
-          ]
-        }
-      },
-      {
         "time": "10:00",
         "roles": {
           "Busser": [
@@ -258,7 +122,7 @@
             "Ivy"
           ],
           "Server": [
-            "Bella"
+            "Oscar"
           ]
         }
       },
@@ -272,10 +136,10 @@
             "Riley"
           ],
           "Manager": [
-            "Wendy"
+            "Ivy"
           ],
           "Server": [
-            "Grace"
+            "Oscar"
           ]
         }
       },
@@ -283,16 +147,16 @@
         "time": "12:00",
         "roles": {
           "Busser": [
-            "Evan"
+            "Vince"
           ],
           "Cook": [
-            "Daisy"
+            "Frank"
           ],
           "Manager": [
-            "Wendy"
+            "Ivy"
           ],
           "Server": [
-            "Grace"
+            "Oscar"
           ]
         }
       },
@@ -303,13 +167,13 @@
             "Vince"
           ],
           "Cook": [
-            "Daisy"
+            "Frank"
           ],
           "Manager": [
-            "Paul"
+            "Ivy"
           ],
           "Server": [
-            "Grace"
+            "Oscar"
           ]
         }
       },
@@ -317,16 +181,16 @@
         "time": "14:00",
         "roles": {
           "Busser": [
-            "Vince"
+            "Quinn"
           ],
           "Cook": [
-            "Daisy"
+            "Frank"
           ],
           "Manager": [
-            "Paul"
+            "Ivy"
           ],
           "Server": [
-            "Uma"
+            "Mona"
           ]
         }
       },
@@ -334,118 +198,16 @@
         "time": "15:00",
         "roles": {
           "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Riley"
-          ],
-          "Manager": [
-            "Ivy"
-          ],
-          "Server": [
-            "Uma"
-          ]
-        }
-      },
-      {
-        "time": "16:00",
-        "roles": {
-          "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Riley"
-          ],
-          "Manager": [
-            "Ivy"
-          ],
-          "Server": [
-            "Grace"
-          ]
-        }
-      },
-      {
-        "time": "17:00",
-        "roles": {
-          "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Riley"
-          ],
-          "Manager": [
-            "Ivy"
-          ],
-          "Server": [
-            "Grace"
-          ]
-        }
-      },
-      {
-        "time": "18:00",
-        "roles": {
-          "Busser": [
             "Quinn"
           ],
           "Cook": [
-            "Jack"
+            "Frank"
           ],
           "Manager": [
-            "Wendy"
+            "Ivy"
           ],
           "Server": [
-            "Yara"
-          ]
-        }
-      },
-      {
-        "time": "19:00",
-        "roles": {
-          "Busser": [
-            "Quinn"
-          ],
-          "Cook": [
-            "Jack"
-          ],
-          "Manager": [
-            "Wendy"
-          ],
-          "Server": [
-            "Yara"
-          ]
-        }
-      },
-      {
-        "time": "20:00",
-        "roles": {
-          "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Bob"
-          ],
-          "Manager": [
-            "Diana"
-          ],
-          "Server": [
-            "Yara"
-          ]
-        }
-      },
-      {
-        "time": "21:00",
-        "roles": {
-          "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Bob"
-          ],
-          "Manager": [
-            "Diana"
-          ],
-          "Server": [
-            "Yara"
+            "Mona"
           ]
         }
       }
@@ -455,36 +217,19 @@
     "day": "Wednesday",
     "hours": [
       {
-        "time": "09:00",
-        "roles": {
-          "Busser": [
-            "Quinn"
-          ],
-          "Cook": [
-            "Riley"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Grace"
-          ]
-        }
-      },
-      {
         "time": "10:00",
         "roles": {
           "Busser": [
-            "Quinn"
+            "Evan"
           ],
           "Cook": [
-            "Riley"
+            "Xander"
           ],
           "Manager": [
-            "Paul"
+            "Ivy"
           ],
           "Server": [
-            "Grace"
+            "Oscar"
           ]
         }
       },
@@ -492,16 +237,16 @@
         "time": "11:00",
         "roles": {
           "Busser": [
-            "Quinn"
+            "Evan"
           ],
           "Cook": [
-            "Riley"
+            "Xander"
           ],
           "Manager": [
-            "Paul"
+            "Ivy"
           ],
           "Server": [
-            "Grace"
+            "Oscar"
           ]
         }
       },
@@ -515,10 +260,10 @@
             "Jack"
           ],
           "Manager": [
-            "Paul"
+            "Ivy"
           ],
           "Server": [
-            "Bella"
+            "Uma"
           ]
         }
       },
@@ -532,10 +277,10 @@
             "Jack"
           ],
           "Manager": [
-            "Wendy"
+            "Ivy"
           ],
           "Server": [
-            "Bella"
+            "Uma"
           ]
         }
       },
@@ -543,16 +288,16 @@
         "time": "14:00",
         "roles": {
           "Busser": [
-            "Vince"
+            "Quinn"
           ],
           "Cook": [
-            "Tara"
+            "Jack"
           ],
           "Manager": [
-            "Wendy"
+            "Ivy"
           ],
           "Server": [
-            "Uma"
+            "Kara"
           ]
         }
       },
@@ -560,118 +305,16 @@
         "time": "15:00",
         "roles": {
           "Busser": [
-            "Vince"
-          ],
-          "Cook": [
-            "Tara"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Uma"
-          ]
-        }
-      },
-      {
-        "time": "16:00",
-        "roles": {
-          "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Frank"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Uma"
-          ]
-        }
-      },
-      {
-        "time": "17:00",
-        "roles": {
-          "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Frank"
-          ],
-          "Manager": [
-            "Wendy"
-          ],
-          "Server": [
-            "Uma"
-          ]
-        }
-      },
-      {
-        "time": "18:00",
-        "roles": {
-          "Busser": [
-            "Leo"
+            "Quinn"
           ],
           "Cook": [
             "Jack"
           ],
           "Manager": [
-            "Wendy"
-          ],
-          "Server": [
-            "Kara"
-          ]
-        }
-      },
-      {
-        "time": "19:00",
-        "roles": {
-          "Busser": [
-            "Leo"
-          ],
-          "Cook": [
-            "Jack"
-          ],
-          "Manager": [
-            "Wendy"
-          ],
-          "Server": [
-            "Kara"
-          ]
-        }
-      },
-      {
-        "time": "20:00",
-        "roles": {
-          "Busser": [
-            "Vince"
-          ],
-          "Cook": [
-            "Riley"
-          ],
-          "Manager": [
             "Ivy"
           ],
           "Server": [
-            "Uma"
-          ]
-        }
-      },
-      {
-        "time": "21:00",
-        "roles": {
-          "Busser": [
-            "Vince"
-          ],
-          "Cook": [
-            "Riley"
-          ],
-          "Manager": [
-            "Ivy"
-          ],
-          "Server": [
-            "Uma"
+            "Kara"
           ]
         }
       }
@@ -681,36 +324,19 @@
     "day": "Thursday",
     "hours": [
       {
-        "time": "09:00",
-        "roles": {
-          "Busser": [
-            "Cody"
-          ],
-          "Cook": [
-            "Tara"
-          ],
-          "Manager": [
-            "Ivy"
-          ],
-          "Server": [
-            "Oscar"
-          ]
-        }
-      },
-      {
         "time": "10:00",
         "roles": {
           "Busser": [
-            "Cody"
+            "Evan"
           ],
           "Cook": [
-            "Tara"
+            "Xander"
           ],
           "Manager": [
             "Ivy"
           ],
           "Server": [
-            "Oscar"
+            "Uma"
           ]
         }
       },
@@ -718,16 +344,16 @@
         "time": "11:00",
         "roles": {
           "Busser": [
-            "Cody"
+            "Evan"
           ],
           "Cook": [
-            "Tara"
+            "Xander"
           ],
           "Manager": [
             "Ivy"
           ],
           "Server": [
-            "Oscar"
+            "Uma"
           ]
         }
       },
@@ -738,13 +364,13 @@
             "Vince"
           ],
           "Cook": [
-            "Riley"
+            "Jack"
           ],
           "Manager": [
             "Ivy"
           ],
           "Server": [
-            "Mona"
+            "Oscar"
           ]
         }
       },
@@ -755,13 +381,13 @@
             "Vince"
           ],
           "Cook": [
-            "Riley"
+            "Jack"
           ],
           "Manager": [
             "Ivy"
           ],
           "Server": [
-            "Mona"
+            "Oscar"
           ]
         }
       },
@@ -769,16 +395,16 @@
         "time": "14:00",
         "roles": {
           "Busser": [
-            "Vince"
+            "Quinn"
           ],
           "Cook": [
-            "Daisy"
+            "Jack"
           ],
           "Manager": [
-            "Wendy"
+            "Ivy"
           ],
           "Server": [
-            "Mona"
+            "Uma"
           ]
         }
       },
@@ -786,118 +412,16 @@
         "time": "15:00",
         "roles": {
           "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Daisy"
-          ],
-          "Manager": [
-            "Wendy"
-          ],
-          "Server": [
-            "Mona"
-          ]
-        }
-      },
-      {
-        "time": "16:00",
-        "roles": {
-          "Busser": [
-            "Hank"
+            "Quinn"
           ],
           "Cook": [
             "Jack"
           ],
           "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Oscar"
-          ]
-        }
-      },
-      {
-        "time": "17:00",
-        "roles": {
-          "Busser": [
-            "Cody"
-          ],
-          "Cook": [
-            "Jack"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Oscar"
-          ]
-        }
-      },
-      {
-        "time": "18:00",
-        "roles": {
-          "Busser": [
-            "Cody"
-          ],
-          "Cook": [
-            "Xander"
-          ],
-          "Manager": [
             "Ivy"
           ],
           "Server": [
-            "Alice"
-          ]
-        }
-      },
-      {
-        "time": "19:00",
-        "roles": {
-          "Busser": [
-            "Vince"
-          ],
-          "Cook": [
-            "Xander"
-          ],
-          "Manager": [
-            "Ivy"
-          ],
-          "Server": [
-            "Alice"
-          ]
-        }
-      },
-      {
-        "time": "20:00",
-        "roles": {
-          "Busser": [
-            "Vince"
-          ],
-          "Cook": [
-            "Tara"
-          ],
-          "Manager": [
-            "Diana"
-          ],
-          "Server": [
-            "Mona"
-          ]
-        }
-      },
-      {
-        "time": "21:00",
-        "roles": {
-          "Busser": [
-            "Vince"
-          ],
-          "Cook": [
-            "Tara"
-          ],
-          "Manager": [
-            "Diana"
-          ],
-          "Server": [
-            "Mona"
+            "Uma"
           ]
         }
       }
@@ -907,36 +431,19 @@
     "day": "Friday",
     "hours": [
       {
-        "time": "09:00",
-        "roles": {
-          "Busser": [
-            "Quinn"
-          ],
-          "Cook": [
-            "Nate"
-          ],
-          "Manager": [
-            "Wendy"
-          ],
-          "Server": [
-            "Kara"
-          ]
-        }
-      },
-      {
         "time": "10:00",
         "roles": {
           "Busser": [
-            "Quinn"
+            "Vince"
           ],
           "Cook": [
-            "Nate"
+            "Frank"
           ],
           "Manager": [
-            "Wendy"
+            "Ivy"
           ],
           "Server": [
-            "Kara"
+            "Oscar"
           ]
         }
       },
@@ -944,16 +451,16 @@
         "time": "11:00",
         "roles": {
           "Busser": [
-            "Quinn"
+            "Vince"
           ],
           "Cook": [
-            "Nate"
+            "Frank"
           ],
           "Manager": [
-            "Wendy"
+            "Ivy"
           ],
           "Server": [
-            "Alice"
+            "Oscar"
           ]
         }
       },
@@ -961,16 +468,16 @@
         "time": "12:00",
         "roles": {
           "Busser": [
-            "Quinn"
+            "Evan"
           ],
           "Cook": [
             "Xander"
           ],
           "Manager": [
-            "Wendy"
+            "Ivy"
           ],
           "Server": [
-            "Alice"
+            "Uma"
           ]
         }
       },
@@ -984,10 +491,10 @@
             "Xander"
           ],
           "Manager": [
-            "Wendy"
+            "Ivy"
           ],
           "Server": [
-            "Mona"
+            "Uma"
           ]
         }
       },
@@ -995,16 +502,16 @@
         "time": "14:00",
         "roles": {
           "Busser": [
-            "Evan"
+            "Cody"
           ],
           "Cook": [
-            "Xander"
+            "Riley"
           ],
           "Manager": [
-            "Paul"
+            "Ivy"
           ],
           "Server": [
-            "Mona"
+            "Kara"
           ]
         }
       },
@@ -1012,142 +519,16 @@
         "time": "15:00",
         "roles": {
           "Busser": [
-            "Evan"
-          ],
-          "Cook": [
-            "Riley"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Mona"
-          ]
-        }
-      },
-      {
-        "time": "16:00",
-        "roles": {
-          "Busser": [
             "Cody"
           ],
           "Cook": [
             "Riley"
           ],
           "Manager": [
-            "Diana"
+            "Ivy"
           ],
           "Server": [
-            "Alice"
-          ]
-        }
-      },
-      {
-        "time": "17:00",
-        "roles": {
-          "Busser": [
-            "Leo",
-            "Vince",
-            "Cody"
-          ],
-          "Cook": [
-            "Jack",
-            "Riley",
-            "Tara"
-          ],
-          "Manager": [
-            "Diana",
-            "Ivy",
-            "Paul"
-          ],
-          "Server": [
-            "Alice",
-            "Mona",
-            "Bella"
-          ]
-        }
-      },
-      {
-        "time": "18:00",
-        "roles": {
-          "Busser": [
-            "Leo",
-            "Vince"
-          ],
-          "Cook": [
-            "Jack",
-            "Tara"
-          ],
-          "Manager": [
-            "Ivy",
-            "Paul"
-          ],
-          "Server": [
-            "Mona",
-            "Bella"
-          ]
-        }
-      },
-      {
-        "time": "19:00",
-        "roles": {
-          "Busser": [
-            "Hank",
-            "Vince"
-          ],
-          "Cook": [
-            "Riley",
-            "Xander"
-          ],
-          "Manager": [
-            "Ivy",
-            "Wendy"
-          ],
-          "Server": [
-            "Alice",
             "Kara"
-          ]
-        }
-      },
-      {
-        "time": "20:00",
-        "roles": {
-          "Busser": [
-            "Hank",
-            "Vince",
-            "Zane"
-          ],
-          "Cook": [
-            "Bob",
-            "Riley",
-            "Xander"
-          ],
-          "Manager": [
-            "Ivy",
-            "Paul",
-            "Wendy"
-          ],
-          "Server": [
-            "Alice",
-            "Kara",
-            "Yara"
-          ]
-        }
-      },
-      {
-        "time": "21:00",
-        "roles": {
-          "Busser": [
-            "Zane"
-          ],
-          "Cook": [
-            "Bob"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Yara"
           ]
         }
       }
@@ -1157,36 +538,19 @@
     "day": "Saturday",
     "hours": [
       {
-        "time": "09:00",
-        "roles": {
-          "Busser": [
-            "Quinn"
-          ],
-          "Cook": [
-            "Tara"
-          ],
-          "Manager": [
-            "Wendy"
-          ],
-          "Server": [
-            "Oscar"
-          ]
-        }
-      },
-      {
         "time": "10:00",
         "roles": {
           "Busser": [
-            "Quinn"
+            "Zane"
           ],
           "Cook": [
-            "Tara"
+            "Nate"
           ],
           "Manager": [
-            "Wendy"
+            "Diana"
           ],
           "Server": [
-            "Oscar"
+            "Sam"
           ]
         }
       },
@@ -1197,10 +561,10 @@
             "Zane"
           ],
           "Cook": [
-            "Xander"
+            "Nate"
           ],
           "Manager": [
-            "Paul"
+            "Diana"
           ],
           "Server": [
             "Sam"
@@ -1211,14 +575,14 @@
         "time": "12:00",
         "roles": {
           "Busser": [
-            "Evan",
+            "Hank",
             "Leo",
             "Zane"
           ],
           "Cook": [
-            "Jack",
-            "Nate",
-            "Xander"
+            "Riley",
+            "Tara",
+            "Daisy"
           ],
           "Manager": [
             "Diana",
@@ -1227,8 +591,8 @@
           ],
           "Server": [
             "Mona",
-            "Oscar",
-            "Sam"
+            "Yara",
+            "Bella"
           ]
         }
       },
@@ -1237,13 +601,13 @@
         "roles": {
           "Busser": [
             "Evan",
-            "Leo",
-            "Zane"
+            "Hank",
+            "Leo"
           ],
           "Cook": [
-            "Bob",
-            "Jack",
-            "Nate"
+            "Riley",
+            "Tara",
+            "Daisy"
           ],
           "Manager": [
             "Diana",
@@ -1251,9 +615,9 @@
             "Wendy"
           ],
           "Server": [
-            "Charlie",
             "Mona",
-            "Oscar"
+            "Yara",
+            "Bella"
           ]
         }
       },
@@ -1261,16 +625,16 @@
         "time": "14:00",
         "roles": {
           "Busser": [
-            "Leo"
+            "Evan"
           ],
           "Cook": [
-            "Bob"
+            "Nate"
           ],
           "Manager": [
             "Ivy"
           ],
           "Server": [
-            "Charlie"
+            "Kara"
           ]
         }
       },
@@ -1278,118 +642,16 @@
         "time": "15:00",
         "roles": {
           "Busser": [
-            "Zane"
+            "Evan"
           ],
           "Cook": [
-            "Bob"
+            "Nate"
           ],
           "Manager": [
             "Ivy"
           ],
           "Server": [
-            "Sam"
-          ]
-        }
-      },
-      {
-        "time": "16:00",
-        "roles": {
-          "Busser": [
-            "Zane"
-          ],
-          "Cook": [
-            "Frank"
-          ],
-          "Manager": [
-            "Ivy"
-          ],
-          "Server": [
-            "Sam"
-          ]
-        }
-      },
-      {
-        "time": "17:00",
-        "roles": {
-          "Busser": [
-            "Zane"
-          ],
-          "Cook": [
-            "Frank"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Yara"
-          ]
-        }
-      },
-      {
-        "time": "18:00",
-        "roles": {
-          "Busser": [
-            "Zane"
-          ],
-          "Cook": [
-            "Riley"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Yara"
-          ]
-        }
-      },
-      {
-        "time": "19:00",
-        "roles": {
-          "Busser": [
-            "Quinn"
-          ],
-          "Cook": [
-            "Riley"
-          ],
-          "Manager": [
-            "Diana"
-          ],
-          "Server": [
-            "Yara"
-          ]
-        }
-      },
-      {
-        "time": "20:00",
-        "roles": {
-          "Busser": [
-            "Quinn"
-          ],
-          "Cook": [
-            "Tara"
-          ],
-          "Manager": [
-            "Diana"
-          ],
-          "Server": [
-            "Yara"
-          ]
-        }
-      },
-      {
-        "time": "21:00",
-        "roles": {
-          "Busser": [
-            "Quinn"
-          ],
-          "Cook": [
-            "Tara"
-          ],
-          "Manager": [
-            "Diana"
-          ],
-          "Server": [
-            "Yara"
+            "Kara"
           ]
         }
       }
@@ -1399,36 +661,19 @@
     "day": "Sunday",
     "hours": [
       {
-        "time": "09:00",
-        "roles": {
-          "Busser": [
-            "Zane"
-          ],
-          "Cook": [
-            "Jack"
-          ],
-          "Manager": [
-            "Diana"
-          ],
-          "Server": [
-            "Oscar"
-          ]
-        }
-      },
-      {
         "time": "10:00",
         "roles": {
           "Busser": [
-            "Zane"
+            "Vince"
           ],
           "Cook": [
-            "Jack"
+            "Xander"
           ],
           "Manager": [
             "Diana"
           ],
           "Server": [
-            "Oscar"
+            "Uma"
           ]
         }
       },
@@ -1436,16 +681,16 @@
         "time": "11:00",
         "roles": {
           "Busser": [
-            "Zane"
+            "Vince"
           ],
           "Cook": [
-            "Jack"
+            "Xander"
           ],
           "Manager": [
             "Diana"
           ],
           "Server": [
-            "Kara"
+            "Uma"
           ]
         }
       },
@@ -1453,10 +698,10 @@
         "time": "12:00",
         "roles": {
           "Busser": [
-            "Quinn"
+            "Vince"
           ],
           "Cook": [
-            "Tara"
+            "Jack"
           ],
           "Manager": [
             "Diana"
@@ -1473,7 +718,7 @@
             "Quinn"
           ],
           "Cook": [
-            "Tara"
+            "Jack"
           ],
           "Manager": [
             "Diana"
@@ -1487,16 +732,16 @@
         "time": "14:00",
         "roles": {
           "Busser": [
-            "Hank"
+            "Quinn"
           ],
           "Cook": [
-            "Frank"
+            "Jack"
           ],
           "Manager": [
-            "Wendy"
+            "Diana"
           ],
           "Server": [
-            "Kara"
+            "Sam"
           ]
         }
       },
@@ -1504,118 +749,16 @@
         "time": "15:00",
         "roles": {
           "Busser": [
-            "Hank"
-          ],
-          "Cook": [
-            "Frank"
-          ],
-          "Manager": [
-            "Wendy"
-          ],
-          "Server": [
-            "Mona"
-          ]
-        }
-      },
-      {
-        "time": "16:00",
-        "roles": {
-          "Busser": [
-            "Leo"
-          ],
-          "Cook": [
-            "Bob"
-          ],
-          "Manager": [
-            "Wendy"
-          ],
-          "Server": [
-            "Mona"
-          ]
-        }
-      },
-      {
-        "time": "17:00",
-        "roles": {
-          "Busser": [
-            "Leo"
-          ],
-          "Cook": [
-            "Bob"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Sam"
-          ]
-        }
-      },
-      {
-        "time": "18:00",
-        "roles": {
-          "Busser": [
-            "Evan"
+            "Quinn"
           ],
           "Cook": [
             "Jack"
           ],
           "Manager": [
-            "Paul"
+            "Diana"
           ],
           "Server": [
             "Sam"
-          ]
-        }
-      },
-      {
-        "time": "19:00",
-        "roles": {
-          "Busser": [
-            "Evan"
-          ],
-          "Cook": [
-            "Jack"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Alice"
-          ]
-        }
-      },
-      {
-        "time": "20:00",
-        "roles": {
-          "Busser": [
-            "Cody"
-          ],
-          "Cook": [
-            "Aaron"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Alice"
-          ]
-        }
-      },
-      {
-        "time": "21:00",
-        "roles": {
-          "Busser": [
-            "Cody"
-          ],
-          "Cook": [
-            "Aaron"
-          ],
-          "Manager": [
-            "Paul"
-          ],
-          "Server": [
-            "Alice"
           ]
         }
       }
