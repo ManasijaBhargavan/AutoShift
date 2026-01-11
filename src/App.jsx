@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Check, X, Star, ChevronRight, Clock } from 'lucide-react';
+import { API_BASE_URL } from './config';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -25,7 +26,7 @@ const STATUS_CONFIG = {
 const App = () => {
   // State for Dynamic Time Slots
   const [timeSlots, setTimeSlots] = useState([]);
-  
+
   // Existing State
   const [schedule, setSchedule] = useState({});
   const [assignedShifts, setAssignedShifts] = useState({});
@@ -38,36 +39,36 @@ const App = () => {
   // --- 1. NEW: Fetch Business Hours from Server API ---
   useEffect(() => {
     // UPDATED: Now fetches from the API endpoint, not the file directly
-    fetch('/api/customization')
+    fetch(`${API_BASE_URL}/api/customization`)
       .then(res => res.json())
       .then(data => {
         // Safe check in case data is missing
         if (!data.constraints || !data.constraints.business_hours) throw new Error("Invalid config");
-        
+
         const { start, end } = data.constraints.business_hours;
-        
+
         // Generate slots
         const generatedSlots = [];
         let current = new Date();
         current.setHours(start, 0, 0, 0);
-        
+
         const closeTime = new Date();
         closeTime.setHours(end, 0, 0, 0);
 
         while (current <= closeTime) {
-          const timeString = current.toLocaleTimeString('en-GB', { 
-            hour: '2-digit', minute: '2-digit' 
+          const timeString = current.toLocaleTimeString('en-GB', {
+            hour: '2-digit', minute: '2-digit'
           });
           generatedSlots.push(timeString);
           current.setMinutes(current.getMinutes() + 30);
         }
-        
+
         setTimeSlots(generatedSlots);
       })
       .catch(err => {
         console.error("Could not load customization:", err);
         // Fallback slots
-        setTimeSlots(["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00"]); 
+        setTimeSlots(["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00"]);
       });
   }, []);
 
@@ -95,9 +96,9 @@ const App = () => {
 
       // Fetch Saved Availability from Server (Authoritative Load)
       // UPDATED URL: matches server.js
-      fetch(`/api/availability/${safeName}.json`)
+      fetch(`${API_BASE_URL}/api/availability/${safeName}.json`)
         .then(res => res.ok ? res.json() : null)
-        .then(data => { if(data) applyAvailabilityData(data); })
+        .then(data => { if (data) applyAvailabilityData(data); })
         .catch(() => console.log("No saved availability found."));
     }
 
@@ -108,7 +109,7 @@ const App = () => {
   const getNextStatus = (currentStatus) => {
     if (currentStatus === 'unavailable') return 'preferred';
     if (currentStatus === 'available') return 'unavailable';
-    return 'preferred';
+    return 'available';
   };
 
   const handleMouseDown = (day, time) => {
@@ -132,21 +133,21 @@ const App = () => {
   const fetchSchedule = async (name) => {
     try {
       // UPDATED URL: matches server.js
-      const res = await fetch('/api/schedule'); 
-      if (!res.ok) return; 
+      const res = await fetch(`${API_BASE_URL}/api/schedule`);
+      if (!res.ok) return;
       const payload = await res.json();
-      
+
       // server.js returns { ok: true, schedule: [...] }
       const data = payload.schedule || [];
-      
+
       const myName = name || (user && user.name);
       if (!myName) return;
       const myShifts = {};
-      
+
       // Since schedule structure might be a direct array or wrapped
       // Check if data is array first
       const daysArray = Array.isArray(data) ? data : (data.days || []);
-      
+
       daysArray.forEach(dayBlock => {
         const dayName = dayBlock.day;
         if (dayBlock.hours) {
@@ -263,23 +264,23 @@ const App = () => {
     };
 
     try {
-      const response = await fetch('/api/save-availability', {
+      const response = await fetch(`${API_BASE_URL}/api/save-availability`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(finalData),
       });
-      
+
       if (response.ok) {
         const resData = await response.json(); // Wait for server to confirm scheduler ran
         console.log("Scheduler Output:", resData.stdout);
-        
+
         alert("✅ Availability saved & Schedule updated!");
-        
+
         try {
           const safe = (finalData.name || 'unknown').replace(/[^a-z0-9-_.]/gi, '_');
           localStorage.setItem(`lastSavedAvailability_${safe}`, JSON.stringify(finalData));
         } catch (e) { }
-        
+
         applyAvailabilityData(finalData);
         await fetchSchedule(); // Refresh the grid with new assignments immediately!
       } else {
@@ -309,7 +310,7 @@ const App = () => {
               <span className="text-xs text-slate-500 uppercase tracking-wider">{user.role || 'Employee'}</span>
               <label className="text-xs text-slate-500 flex items-center gap-2">
                 <span className="text-xs">Max hrs</span>
-                <input type="number" value={maxHours} onChange={e=>setMaxHours(Number(e.target.value))} className="w-16 border rounded p-1 text-sm" />
+                <input type="number" value={maxHours} onChange={e => setMaxHours(Number(e.target.value))} className="w-16 border rounded p-1 text-sm" />
               </label>
             </div>
           </div>
@@ -340,11 +341,11 @@ const App = () => {
 
       {/* Main Grid Card */}
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-        
+
         {/* Scrollable Wrapper */}
         <div className="overflow-x-auto">
           <div className="p-8 min-w-max">
-            
+
             <div className="grid gap-4" style={{ gridTemplateColumns: `80px repeat(${timeSlots.length}, minmax(60px, 1fr))` }}>
 
               {/* Header Row */}
