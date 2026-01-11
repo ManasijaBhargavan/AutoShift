@@ -36,6 +36,7 @@ const App = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartStatus, setDragStartStatus] = useState(null);
   const [user, setCurrentUser] = useState(null);
+  const [maxHours, setMaxHours] = useState(40);
 
   useEffect(() => {
     // 1. Handle Dragging Logic
@@ -51,114 +52,29 @@ const App = () => {
       const myName = currentUserObj.name; // e.g., "Vince" or "Mona"
 
       // 3. FETCH AND PARSE THE SCHEDULE
-      fetch('/schedule.json')
-        .then(res => res.json())
-        .then(data => {
-          const myShifts = {};
-
-          // Loop through every Day in the JSON
-          data.forEach(dayBlock => {
-            const dayName = dayBlock.day; // e.g., "Monday"
-
-            // Loop through every Hour block
-            if (dayBlock.hours) {
-              dayBlock.hours.forEach(hourBlock => {
-                const time = hourBlock.time; // e.g., "09:00"
-
-                // Check all roles in this hour (Busser, Server, etc.)
-                // hourBlock.roles is { Busser: ["Vince"], Cook: ["Jack"] }
-                Object.values(hourBlock.roles).forEach(employeeList => {
-
-                  // If my name is in this list, mark the grid!
-                  if (employeeList.includes(myName)) {
-
-                    // Add the exact time slot (e.g., "Monday-09:00")
-                    myShifts[`${dayName}-${time}`] = true;
-
-                    // OPTIONAL: If your JSON only has hourly slots (9:00, 10:00) 
-                    // but you want to fill the half-hour slots (9:30) visually:
-                    const [h, m] = time.split(':');
-                    if (m === '00') {
-                      myShifts[`${dayName}-${h}:30`] = true;
-                    }
-                  }
-                });
-              });
-            }
-          });
-
-          // Update the state with the found shifts
-          setAssignedShifts(myShifts);
-        })
-        .catch(err => console.error("Error loading schedule:", err));
+      fetchSchedule(myName);
 
       // We try to find the file based on the user's name
       // If you are just testing, you can hardcode this to fetch('/availability.json')
-      const safeName = myName.replace(/\s+/g, '_');
-      fetch(`/schedules/${safeName}_preferences.json`)
+      const safeName = myName.replace(/[^a-z0-9-_.]/gi, '_');
+
+      // If we have a recently-saved availability in localStorage, apply it first
+      try {
+        const cached = localStorage.getItem(`lastSavedAvailability_${safeName}`);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          applyAvailabilityData(parsed);
+        }
+      } catch (e) {
+        // ignore parse errors
+      }
+
+      fetch(`/api/availability/${safeName}`)
         .then(res => {
           if (!res.ok) throw new Error("No previous preferences found");
           return res.json();
         })
-        .then(data => {
-          const loadedSchedule = {};
-
-          // Helper to generate time slots between two times
-          // Input: "08:00", "10:00" -> Output: ["08:00", "08:30", "09:00", "09:30"]
-          const fillSlots = (startStr, endStr) => {
-            const slots = [];
-            const [startH, startM] = startStr.split(':').map(Number);
-            const [endH, endM] = endStr.split(':').map(Number);
-
-            let current = new Date();
-            current.setHours(startH, startM, 0);
-
-            const end = new Date();
-            end.setHours(endH, endM, 0);
-
-            // Loop until we reach the end time
-            while (current < end) {
-              const timeString = current.toLocaleTimeString('en-GB', {
-                hour: '2-digit', minute: '2-digit'
-              });
-              slots.push(timeString);
-              current.setMinutes(current.getMinutes() + 30); // Add 30 mins
-            }
-            return slots;
-          };
-
-          // Iterate through the JSON structure
-          // data.availability is { "Monday": { "unavailable": ["08:00-12:00"], ... }, ... }
-          if (data.availability) {
-            Object.entries(data.availability).forEach(([day, categories]) => {
-
-              // 1. Process Unavailable Ranges
-              if (categories.unavailable) {
-                categories.unavailable.forEach(range => {
-                  const [start, end] = range.split('-');
-                  const slots = fillSlots(start, end);
-                  slots.forEach(time => {
-                    loadedSchedule[`${day}-${time}`] = 'unavailable';
-                  });
-                });
-              }
-
-              // 2. Process Preferred Ranges
-              if (categories.preferred) {
-                categories.preferred.forEach(range => {
-                  const [start, end] = range.split('-');
-                  const slots = fillSlots(start, end);
-                  slots.forEach(time => {
-                    loadedSchedule[`${day}-${time}`] = 'preferred';
-                  });
-                });
-              }
-            });
-          }
-
-          // Update the grid state!
-          setSchedule(loadedSchedule);
-        })
+        .then(data => applyAvailabilityData(data))
         .catch(err => {
           console.log("No previous preferences file found (this is normal for new users).");
         });
@@ -190,6 +106,89 @@ const App = () => {
   };
 
   const preventDragHandler = (e) => e.preventDefault();
+
+  const fetchSchedule = async (name) => {
+    try {
+      const res = await fetch('/api/schedule');
+      if (!res.ok) return console.error('Could not fetch schedule');
+      const payload = await res.json();
+      const data = payload.schedule || [];
+      const myName = name || (user && user.name);
+      if (!myName) return;
+      const myShifts = {};
+      data.forEach(dayBlock => {
+        const dayName = dayBlock.day;
+        if (dayBlock.hours) {
+          dayBlock.hours.forEach(hourBlock => {
+            const time = hourBlock.time;
+            Object.values(hourBlock.roles).forEach(employeeList => {
+              if (employeeList.includes(myName)) {
+                myShifts[`${dayName}-${time}`] = true;
+                const [h, m] = time.split(':');
+                if (m === '00') myShifts[`${dayName}-${h}:30`] = true;
+              }
+            });
+          });
+        }
+      });
+      setAssignedShifts(myShifts);
+    } catch (err) {
+      console.error('Error loading schedule:', err);
+    }
+  };
+
+  // Helper to generate time slots between two times
+  // Input: "08:00", "10:00" -> Output: ["08:00", "08:30", "09:00", "09:30"]
+  const fillSlots = (startStr, endStr) => {
+    const slots = [];
+    const [startH, startM] = startStr.split(':').map(Number);
+    const [endH, endM] = endStr.split(':').map(Number);
+
+    let current = new Date();
+    current.setHours(startH, startM, 0);
+
+    const end = new Date();
+    end.setHours(endH, endM, 0);
+
+    // Loop until we reach the end time
+    while (current < end) {
+      const timeString = current.toLocaleTimeString('en-GB', {
+        hour: '2-digit', minute: '2-digit'
+      });
+      slots.push(timeString);
+      current.setMinutes(current.getMinutes() + 30); // Add 30 mins
+    }
+    return slots;
+  };
+
+  const applyAvailabilityData = (data) => {
+    const loadedSchedule = {};
+    if (!data) return;
+    if (data.availability) {
+      Object.entries(data.availability).forEach(([day, categories]) => {
+        if (categories.unavailable) {
+          categories.unavailable.forEach(range => {
+            const [start, end] = range.split('-');
+            const slots = fillSlots(start, end);
+            slots.forEach(time => {
+              loadedSchedule[`${day}-${time}`] = 'unavailable';
+            });
+          });
+        }
+        if (categories.preferred) {
+          categories.preferred.forEach(range => {
+            const [start, end] = range.split('-');
+            const slots = fillSlots(start, end);
+            slots.forEach(time => {
+              loadedSchedule[`${day}-${time}`] = 'preferred';
+            });
+          });
+        }
+      });
+    }
+    setSchedule(loadedSchedule);
+    if (data.max_hours) setMaxHours(data.max_hours);
+  };
 
   const handleSubmit = async () => {
     const addMinutes = (timeStr, minsToAdd) => {
@@ -239,17 +238,30 @@ const App = () => {
     const finalData = {
       name: user ? user.name : "Unknown Employee",
       role: user && user.role ? user.role : "Server",
-      max_hours: 40,
+      max_hours: maxHours,
       availability: availabilityData
     };
 
     try {
-      const response = await fetch('http://localhost:5000/save-schedule', {
+      const response = await fetch('http://localhost:3001/api/save-availability', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(finalData),
       });
-      if (response.ok) alert("✅ Schedule submitted successfully!");
+      if (response.ok) {
+        alert("✅ Schedule submitted successfully!");
+        // Cache the saved availability locally so a watcher-triggered reload
+        // will still show the user's most recent selection.
+        try {
+          const safe = (finalData.name || 'unknown').replace(/[^a-z0-9-_.]/gi, '_');
+          localStorage.setItem(`lastSavedAvailability_${safe}`, JSON.stringify(finalData));
+        } catch (e) { /* ignore */ }
+
+        // Update UI to reflect saved availability immediately
+        try { applyAvailabilityData(finalData); } catch (e) { /* ignore */ }
+        // Also refresh assigned shifts from scheduler
+        try { await fetchSchedule(); } catch(e) { /* ignore */ }
+      }
       else alert("❌ Failed to save schedule.");
     } catch (error) {
       console.error("Error submitting schedule:", error);
@@ -270,7 +282,13 @@ const App = () => {
           </div>
           <div>
             <h2 className="font-bold text-slate-800">{user.name}</h2>
-            <span className="text-xs text-slate-500 uppercase tracking-wider">{user.role || 'Employee'}</span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-slate-500 uppercase tracking-wider">{user.role || 'Employee'}</span>
+              <label className="text-xs text-slate-500 flex items-center gap-2">
+                <span className="text-xs">Max hrs</span>
+                <input type="number" value={maxHours} onChange={e=>setMaxHours(Number(e.target.value))} className="w-16 border rounded p-1 text-sm" />
+              </label>
+            </div>
           </div>
         </div>
 
