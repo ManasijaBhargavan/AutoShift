@@ -1,21 +1,4 @@
-import React, {useMemo, useState} from 'react';
-// scheduleData now fetched from server
-import customizationData from '../customization.json';
-
-const [scheduleData, setScheduleData] = useState([]);
-
-useEffect(() => {
-  fetch('http://20.64.242.172/api/schedule')
-    .then(res => res.json())
-    .then(data => setScheduleData(data));
-}, []);
-
-const handleSolve = async () => {
-  const res = await fetch('http://20.64.242.172/api/solve', { method: 'POST' });
-  const newSchedule = await res.json();
-  if (newSchedule.error) alert(newSchedule.error);
-  else setScheduleData(newSchedule);
-};
+import React, { useMemo, useState, useEffect } from 'react';
 
 const PALETTE = [
   '#ef476f', '#ffd166', '#06d6a0', '#118ab2', '#073b4c', '#8338ec', '#ff6b6b', '#4cc9f0', '#ffd6a5', '#a0c4ff'
@@ -39,31 +22,26 @@ function buildShiftsForDay(day) {
     }
   }
 
-  // group by role and create sub-lanes to avoid overlaps
   const roles = Array.from(new Set(allShifts.map(s => s.role))).sort();
   const finalRoles = [];
   for (const role of roles) {
     const roleShifts = allShifts.filter(s => s.role === role).sort((a,b) => a.start - b.start);
 
-    // Group shifts by employee name so discontinuous shifts stay together
     const byName = {};
     for (const s of roleShifts) {
       if (!byName[s.name]) byName[s.name] = [];
       byName[s.name].push({...s});
     }
 
-    // Ensure each name's shifts are sorted (and contiguous hours were merged earlier)
     for (const name of Object.keys(byName)) {
       byName[name].sort((a,b) => a.start - b.start);
     }
 
     const subLanes = [];
-    // place each employee (all their shifts) into a single lane when possible
     for (const name of Object.keys(byName)) {
       const group = byName[name];
       let placed = false;
       for (const lane of subLanes) {
-        // check if ANY shift in group conflicts with ANY shift in lane
         const conflict = group.some(g => lane.some(l => l.start < g.end && g.start < l.end));
         if (!conflict) { lane.push(...group); placed = true; break; }
       }
@@ -77,37 +55,49 @@ function buildShiftsForDay(day) {
 }
 
 const Employer = () => {
+  // ✅ ALL HOOKS MUST BE HERE, INSIDE THE COMPONENT
   const [dayIndex, setDayIndex] = useState(0);
-  const [draftCustomization, setDraftCustomization] = useState(customizationData || {});
-  const [savedCustomization, setSavedCustomization] = useState(customizationData || {});
+  const [draftCustomization, setDraftCustomization] = useState({});
+  const [savedCustomization, setSavedCustomization] = useState({});
   const [schedule, setSchedule] = useState([]);
 
   const days = Array.isArray(schedule) ? schedule : [];
 
-  // fetch schedule from server on mount
-  React.useEffect(()=>{
+  // ✅ useEffect INSIDE component
+  useEffect(() => {
     let mounted = true;
-    // fetch saved customization and schedule
-    fetch('http://localhost:3001/api/customization')
-      .then(r=>r.json())
-      .then(j=>{ if (!mounted) return; if (j && !j.error) {
-        setSavedCustomization(j);
-        setDraftCustomization(j);
-      }})
-      .catch(()=>{});
+    
+    // Fetch customization
+    fetch('/api/customization')
+      .then(r => r.json())
+      .then(j => { 
+        if (!mounted) return; 
+        if (j && !j.error) {
+          setSavedCustomization(j);
+          setDraftCustomization(j);
+        }
+      })
+      .catch(() => {});
 
-    fetch('http://localhost:3001/api/schedule')
-      .then(r=>r.json())
-      .then(j=>{ if (!mounted) return; if (j.ok && j.schedule) setSchedule(j.schedule); })
-      .catch(()=>{});
-    return ()=>{ mounted = false };
-  },[]);
+    // Fetch schedule
+    fetch('/api/schedule')
+      .then(r => r.json())
+      .then(j => { 
+        if (!mounted) return; 
+        if (j.ok && j.schedule) setSchedule(j.schedule); 
+      })
+      .catch(() => {});
+
+    return () => { mounted = false };
+  }, []);
 
   const allNames = useMemo(() => {
     const s = new Set();
     for (const d of days) {
-      for (const h of (d.hours||[])) {
-        for (const role of Object.keys(h.roles||{})) for (const n of h.roles[role]) s.add(n);
+      for (const h of (d.hours || [])) {
+        for (const role of Object.keys(h.roles || {})) {
+          for (const n of h.roles[role]) s.add(n);
+        }
       }
     }
     return Array.from(s).sort();
@@ -115,7 +105,7 @@ const Employer = () => {
 
   const nameToColor = useMemo(() => {
     const map = {};
-    allNames.forEach((n,i)=> map[n] = PALETTE[i % PALETTE.length]);
+    allNames.forEach((n, i) => map[n] = PALETTE[i % PALETTE.length]);
     return map;
   }, [allNames]);
 
@@ -128,24 +118,21 @@ const Employer = () => {
     return buildShiftsForDay(day);
   }, [days, dayIndex]);
 
-
   function applyStructuredChange(path, value) {
     const next = JSON.parse(JSON.stringify(draftCustomization || {}));
     const parts = path.split('.');
     let cur = next;
-    for (let i=0;i<parts.length-1;i++) {
+    for (let i = 0; i < parts.length - 1; i++) {
       const p = parts[i];
       if (cur[p] == null) cur[p] = {};
       cur = cur[p];
     }
-    cur[parts[parts.length-1]] = value;
+    cur[parts[parts.length - 1]] = value;
     setDraftCustomization(next);
   }
 
-  
-
   function downloadJson() {
-    const blob = new Blob([JSON.stringify(draftCustomization, null, 2)], {type:'application/json'});
+    const blob = new Blob([JSON.stringify(draftCustomization, null, 2)], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -161,33 +148,34 @@ const Employer = () => {
       await navigator.clipboard.writeText(JSON.stringify(draftCustomization, null, 2));
       alert('Customization copied to clipboard');
     } catch (e) {
-      alert('Copy failed: '+e.message);
+      alert('Copy failed: ' + e.message);
     }
   }
 
   async function saveToServer() {
     try {
-      const res = await fetch('http://localhost:3001/api/customization', {
+      const res = await fetch('/api/customization', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(draftCustomization)
       });
       if (!res.ok) {
-        const err = await res.json().catch(()=>({error:res.statusText}));
+        const err = await res.json().catch(() => ({error: res.statusText}));
         throw new Error(err.error || res.statusText);
       }
-      const body = await res.json().catch(()=>null);
+      const body = await res.json().catch(() => null);
       if (body && body.schedule) {
         setSchedule(body.schedule);
         setDayIndex(0);
-        // update saved customization only after successful run
         setSavedCustomization(draftCustomization);
         alert('Saved and schedule regenerated.');
       } else if (body && body.ok) {
-        // schedule may be generated later; try fetching
-        const poll = await fetch('http://localhost:3001/api/schedule').then(r=>r.json()).catch(()=>null);
+        const poll = await fetch('/api/schedule').then(r => r.json()).catch(() => null);
         if (poll && poll.ok && poll.schedule) {
-          setSchedule(poll.schedule); setDayIndex(0); setSavedCustomization(draftCustomization); alert('Saved and schedule regenerated.');
+          setSchedule(poll.schedule); 
+          setDayIndex(0); 
+          setSavedCustomization(draftCustomization); 
+          alert('Saved and schedule regenerated.');
         } else alert('Saved but schedule not available yet.');
       } else {
         alert('Saved but unexpected server response');
@@ -203,24 +191,22 @@ const Employer = () => {
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold">Schedule Visualizer</h1>
           <div>
-            <select value={dayIndex} onChange={e=>setDayIndex(Number(e.target.value))} className="border rounded-md p-2">
-              {days.map((d,i)=> <option key={d.day||i} value={i}>{d.day || `Day ${i+1}`}</option>)}
+            <select value={dayIndex} onChange={e => setDayIndex(Number(e.target.value))} className="border rounded-md p-2">
+              {days.map((d, i) => <option key={d.day || i} value={i}>{d.day || `Day ${i + 1}`}</option>)}
             </select>
           </div>
         </div>
 
-        
         <div className="w-full overflow-auto border rounded-md p-4 bg-white">
           <div className="mb-2 text-sm text-slate-500">Hours ({businessStart}–{businessEnd})</div>
           <div className="relative w-full" style={{minWidth: '800px'}}>
-            {/* timeline ticks aligned to right content area */}
             <div className="relative h-6">
-              <div style={{position:'absolute', left:'10rem', right:0, top:0, height:'100%'}}>
-                {Array.from({length: businessSpan + 1}).map((_, idx)=> {
+              <div style={{position: 'absolute', left: '10rem', right: 0, top: 0, height: '100%'}}>
+                {Array.from({length: businessSpan + 1}).map((_, idx) => {
                   const hour = businessStart + idx;
                   const leftPct = ((hour - businessStart) / businessSpan) * 100;
                   return (
-                    <div key={hour} style={{position:'absolute', left:`${leftPct}%`, transform:'translateX(-50%)', top:0}} className="text-xs text-slate-400">{hour}</div>
+                    <div key={hour} style={{position: 'absolute', left: `${leftPct}%`, transform: 'translateX(-50%)', top: 0}} className="text-xs text-slate-400">{hour}</div>
                   );
                 })}
               </div>
@@ -236,19 +222,18 @@ const Employer = () => {
                       const laneHeight = 44;
                       const isLast = laneIdx === roleObj.lanes.length - 1;
                       return (
-                        <div key={laneIdx} style={{position:'relative', height:laneHeight, marginBottom: isLast ? 0 : 6}}>
-                          {subLane.map((s, j)=> {
-                            // clamp shift to business hours for display
+                        <div key={laneIdx} style={{position: 'relative', height: laneHeight, marginBottom: isLast ? 0 : 6}}>
+                          {subLane.map((s, j) => {
                             const sStart = Math.max(s.start, businessStart);
                             const sEnd = Math.min(s.end, businessEnd);
                             if (sEnd <= sStart) return null;
                             const dur = Math.max(0.25, sEnd - sStart);
-                            const left = ((sStart - businessStart)/businessSpan)*100;
-                            const width = (dur/businessSpan)*100;
+                            const left = ((sStart - businessStart) / businessSpan) * 100;
+                            const width = (dur / businessSpan) * 100;
                             const bg = nameToColor[s.name] || '#999';
                             return (
                               <div key={j} title={`${s.name} (${s.start}:00-${s.end}:00)`}
-                                style={{position:'absolute', left:`${left}%`, width:`${width}%`, top:0, bottom:0, background:bg, color:'#fff', borderRadius:6, display:'flex', alignItems:'center', justifyContent:'center', fontWeight:600, fontSize:12, padding:'0 6px', boxShadow:'0 1px 2px rgba(0,0,0,0.1)'}}>
+                                style={{position: 'absolute', left: `${left}%`, width: `${width}%`, top: 0, bottom: 0, background: bg, color: '#fff', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: 12, padding: '0 6px', boxShadow: '0 1px 2px rgba(0,0,0,0.1)'}}>
                                 {s.name}
                               </div>
                             );
@@ -263,9 +248,8 @@ const Employer = () => {
           </div>
         </div>
 
-        {/* Customization editor (moved below schedule) */}
         <div className="w-full mt-6 border rounded-md p-4 bg-white">
-            <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold">Customization</h2>
             <div className="space-x-2">
               <button onClick={saveToServer} className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md">Save</button>
@@ -280,26 +264,26 @@ const Employer = () => {
               <div className="space-y-3">
                 <label className="flex items-center justify-between">
                   <span className="text-sm">Min shift length</span>
-                  <input type="number" value={draftCustomization.constraints?.min_shift_length || ''} onChange={e=>applyStructuredChange('constraints.min_shift_length', Number(e.target.value))} className="w-32 border rounded p-2" />
+                  <input type="number" value={draftCustomization.constraints?.min_shift_length || ''} onChange={e => applyStructuredChange('constraints.min_shift_length', Number(e.target.value))} className="w-32 border rounded p-2" />
                 </label>
                 <label className="flex items-center justify-between">
                   <span className="text-sm">Max shift length</span>
-                  <input type="number" value={draftCustomization.constraints?.max_shift_length || ''} onChange={e=>applyStructuredChange('constraints.max_shift_length', Number(e.target.value))} className="w-32 border rounded p-2" />
+                  <input type="number" value={draftCustomization.constraints?.max_shift_length || ''} onChange={e => applyStructuredChange('constraints.max_shift_length', Number(e.target.value))} className="w-32 border rounded p-2" />
                 </label>
                 <label className="flex items-center justify-between">
                   <span className="text-sm">Daily max hours</span>
-                  <input type="number" value={draftCustomization.constraints?.daily_max_hours || ''} onChange={e=>applyStructuredChange('constraints.daily_max_hours', Number(e.target.value))} className="w-32 border rounded p-2" />
+                  <input type="number" value={draftCustomization.constraints?.daily_max_hours || ''} onChange={e => applyStructuredChange('constraints.daily_max_hours', Number(e.target.value))} className="w-32 border rounded p-2" />
                 </label>
                 <label className="flex items-center justify-between">
                   <span className="text-sm">Global staff floor</span>
-                  <input type="number" value={draftCustomization.constraints?.global_staff_floor || ''} onChange={e=>applyStructuredChange('constraints.global_staff_floor', Number(e.target.value))} className="w-32 border rounded p-2" />
+                  <input type="number" value={draftCustomization.constraints?.global_staff_floor || ''} onChange={e => applyStructuredChange('constraints.global_staff_floor', Number(e.target.value))} className="w-32 border rounded p-2" />
                 </label>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Business hours</span>
                   <div className="flex items-center space-x-2">
-                    <input type="number" value={draftCustomization.constraints?.business_hours?.start ?? ''} onChange={e=>applyStructuredChange('constraints.business_hours.start', Number(e.target.value))} className="w-20 border rounded p-2" />
+                    <input type="number" value={draftCustomization.constraints?.business_hours?.start ?? ''} onChange={e => applyStructuredChange('constraints.business_hours.start', Number(e.target.value))} className="w-20 border rounded p-2" />
                     <span className="text-sm">to</span>
-                    <input type="number" value={draftCustomization.constraints?.business_hours?.end ?? ''} onChange={e=>applyStructuredChange('constraints.business_hours.end', Number(e.target.value))} className="w-20 border rounded p-2" />
+                    <input type="number" value={draftCustomization.constraints?.business_hours?.end ?? ''} onChange={e => applyStructuredChange('constraints.business_hours.end', Number(e.target.value))} className="w-20 border rounded p-2" />
                   </div>
                 </div>
               </div>
@@ -308,9 +292,9 @@ const Employer = () => {
             <div>
               <div className="text-sm font-medium mb-2">Name Colors</div>
               <div className="flex flex-wrap gap-2 max-h-40 overflow-auto p-2 border rounded bg-white">
-                {allNames.map((n)=> (
+                {allNames.map((n) => (
                   <div key={n} className="flex items-center space-x-2 bg-slate-50 rounded px-2 py-1 shadow-sm">
-                    <div style={{width:14,height:14,background:nameToColor[n]||'#999',borderRadius:4}} />
+                    <div style={{width: 14, height: 14, background: nameToColor[n] || '#999', borderRadius: 4}} />
                     <div className="text-sm">{n}</div>
                   </div>
                 ))}
