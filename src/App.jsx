@@ -318,50 +318,52 @@ const App = () => {
       </div>
 
       {/* Main Grid */}
-      <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden overflow-x-auto">
-        <div className="p-8">
-          
-          <div className="grid gap-4" style={{ gridTemplateColumns: `80px repeat(${timeSlots.length}, minmax(60px, 1fr))` }}>
+      <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <div className="p-8 min-w-max">
+            
+            <div className="grid gap-4" style={{ gridTemplateColumns: `80px repeat(${timeSlots.length}, minmax(60px, 1fr))` }}>
 
-            {/* Header Row */}
-            <div className="font-bold text-slate-400 uppercase text-xs tracking-wider self-center"></div>
-            {timeSlots.map((time) => (
-              <div key={time} className="text-center font-semibold text-xs text-slate-400 pb-2 border-b border-slate-100 rotate-0">{time}</div>
-            ))}
+              {/* Header Row */}
+              <div className="font-bold text-slate-400 uppercase text-xs tracking-wider self-center"></div>
+              {timeSlots.map((time) => (
+                <div key={time} className="text-center font-semibold text-xs text-slate-400 pb-2 border-b border-slate-100 rotate-0">{time}</div>
+              ))}
 
-            {/* Rows */}
-            {DAYS.map((day) => (
-              <React.Fragment key={day}>
-                <div className="font-bold text-slate-700 text-sm self-center">{day}</div>
+              {/* Rows */}
+              {DAYS.map((day) => (
+                <React.Fragment key={day}>
+                  <div className="font-bold text-slate-700 text-sm self-center">{day}</div>
 
-                {timeSlots.map((time) => {
-                  const key = `${day}-${time}`;
+                  {timeSlots.map((time) => {
+                    const key = `${day}-${time}`;
 
-                  // View Mode
-                  if (viewMode === 'view') {
-                    const isAssigned = assignedShifts[key];
+                    // View Mode
+                    if (viewMode === 'view') {
+                      const isAssigned = assignedShifts[key];
+                      return (
+                        <div key={key} className={`h-12 rounded border transition-all duration-200 flex items-center justify-center ${isAssigned ? 'bg-indigo-600 border-indigo-700 shadow-sm' : 'bg-slate-50 border-slate-100 opacity-50'}`}>
+                          {isAssigned && <Clock size={14} className="text-white" />}
+                        </div>
+                      );
+                    }
+
+                    // Input Mode
+                    const status = schedule[key] || 'available';
+                    const config = STATUS_CONFIG[status];
                     return (
-                      <div key={key} className={`h-12 rounded border transition-all duration-200 flex items-center justify-center ${isAssigned ? 'bg-indigo-600 border-indigo-700 shadow-sm' : 'bg-slate-50 border-slate-100 opacity-50'}`}>
-                        {isAssigned && <Clock size={14} className="text-white" />}
+                      <div key={key} onDragStart={preventDragHandler} onMouseDown={() => handleMouseDown(day, time)} onMouseEnter={() => handleMouseEnter(day, time)} className={`h-12 rounded border transition-all duration-100 cursor-pointer select-none flex items-center justify-center ${config.color} ${isDragging ? 'hover:scale-95' : 'hover:scale-105'}`}>
+                        {status !== 'available' && <div className="opacity-50">{config.icon}</div>}
                       </div>
                     );
-                  }
-
-                  // Input Mode
-                  const status = schedule[key] || 'available';
-                  const config = STATUS_CONFIG[status];
-                  return (
-                    <div key={key} onDragStart={preventDragHandler} onMouseDown={() => handleMouseDown(day, time)} onMouseEnter={() => handleMouseEnter(day, time)} className={`h-12 rounded border transition-all duration-100 cursor-pointer select-none flex items-center justify-center ${config.color} ${isDragging ? 'hover:scale-95' : 'hover:scale-105'}`}>
-                      {status !== 'available' && <div className="opacity-50">{config.icon}</div>}
-                    </div>
-                  );
-                })}
-              </React.Fragment>
-            ))}
+                  })}
+                </React.Fragment>
+              ))}
+            </div>
           </div>
-        </div>
+        </div> {/* End of scrollable wrapper */}
 
-        {/* --- Footer with Submit Button (Restored!) --- */}
+        {/* Footer - FIXED: Now outside the scrollable area, spans full width */}
         {viewMode === 'input' && (
           <div className="bg-slate-50 p-6 flex justify-end items-center border-t border-slate-100">
             <button

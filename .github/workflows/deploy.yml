@@ -1,15 +1,23 @@
-name: Simple Deploy
+name: Build and Deploy
+
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: self-hosted
+
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: npm install
+
       - name: Build Frontend
-        run: |
-          npm install
-          npm run build  # This creates the /dist folder on your VM
+        run: npm run build
+
+      - name: Ensure Python Permissions
+        run: chmod +x *.py
