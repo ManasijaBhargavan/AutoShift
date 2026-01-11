@@ -1,0 +1,12 @@
+{
+  "employers": [
+    {"username": "admin", "password": "employer-secret"},
+    {"username": "manager", "password": "manager-password"}
+  ],
+  "employees": [
+    { "name": "Alice", "password": "alicepass", "role" : "Server" },
+    { "name": "Bob", "password": "bobpass", "role" : "Chef" },
+    { "name": "Charlie", "password" : "charliepass",  "role" : "Busser" },
+    { "name": "Diana", "password" : "dianapass",  "role" : "Manager" }
+  ]
+}
