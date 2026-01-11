@@ -106,9 +106,9 @@ const App = () => {
 
   // Helper Functions
   const getNextStatus = (currentStatus) => {
-    if (currentStatus === 'unavailable') return 'available';
-    if (currentStatus === 'available') return 'preferred';
-    return 'unavailable';
+    if (currentStatus === 'unavailable') return 'preferred';
+    if (currentStatus === 'available') return 'unavailable';
+    return 'preferred';
   };
 
   const handleMouseDown = (day, time) => {
