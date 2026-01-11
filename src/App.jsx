@@ -38,18 +38,61 @@ const App = () => {
   const [user, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    // 1. Handle Dragging Logic
     const handleGlobalMouseUp = () => setIsDragging(false);
     window.addEventListener('mouseup', handleGlobalMouseUp);
 
+    // 2. Load User from Login
     const storedUser = localStorage.getItem('currentUser');
+    
     if (storedUser) {
-      setCurrentUser(JSON.parse(storedUser));
-      // Mock Data for "View Mode"
-      setAssignedShifts({
-        "Monday-08:00": true, "Monday-08:30": true, "Monday-09:00": true,
-        "Wednesday-12:00": true, "Wednesday-12:30": true, "Wednesday-13:00": true
-      });
+      const currentUserObj = JSON.parse(storedUser);
+      setCurrentUser(currentUserObj);
+      const myName = currentUserObj.name; // e.g., "Vince" or "Mona"
+
+      // 3. FETCH AND PARSE THE SCHEDULE
+      fetch('/schedule.json')
+        .then(res => res.json())
+        .then(data => {
+          const myShifts = {};
+
+          // Loop through every Day in the JSON
+          data.forEach(dayBlock => {
+            const dayName = dayBlock.day; // e.g., "Monday"
+
+            // Loop through every Hour block
+            if (dayBlock.hours) {
+              dayBlock.hours.forEach(hourBlock => {
+                const time = hourBlock.time; // e.g., "09:00"
+                
+                // Check all roles in this hour (Busser, Server, etc.)
+                // hourBlock.roles is { Busser: ["Vince"], Cook: ["Jack"] }
+                Object.values(hourBlock.roles).forEach(employeeList => {
+                  
+                  // If my name is in this list, mark the grid!
+                  if (employeeList.includes(myName)) {
+                    
+                    // Add the exact time slot (e.g., "Monday-09:00")
+                    myShifts[`${dayName}-${time}`] = true;
+
+                    // OPTIONAL: If your JSON only has hourly slots (9:00, 10:00) 
+                    // but you want to fill the half-hour slots (9:30) visually:
+                    const [h, m] = time.split(':');
+                    if (m === '00') {
+                       myShifts[`${dayName}-${h}:30`] = true;
+                    }
+                  }
+                });
+              });
+            }
+          });
+
+          // Update the state with the found shifts
+          setAssignedShifts(myShifts);
+        })
+        .catch(err => console.error("Error loading schedule:", err));
     }
+
     return () => window.removeEventListener('mouseup', handleGlobalMouseUp);
   }, []);
 
