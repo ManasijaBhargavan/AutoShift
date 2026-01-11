@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Check, X, Star, ChevronRight, Clock } from 'lucide-react';
+import { Check, X, Star, ChevronRight, Clock, Sparkles, Loader2, Send } from 'lucide-react';
 import { API_BASE_URL } from './config';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -36,13 +36,16 @@ const App = () => {
   const [user, setCurrentUser] = useState(null);
   const [maxHours, setMaxHours] = useState(40);
 
+  // Chatbot State
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResponse, setAiResponse] = useState(null);
+
   // --- 1. NEW: Fetch Business Hours from Server API ---
   useEffect(() => {
-    // UPDATED: Now fetches from the API endpoint, not the file directly
     fetch(`${API_BASE_URL}/api/customization`)
       .then(res => res.json())
       .then(data => {
-        // Safe check in case data is missing
         if (!data.constraints || !data.constraints.business_hours) throw new Error("Invalid config");
 
         const { start, end } = data.constraints.business_hours;
@@ -67,7 +70,6 @@ const App = () => {
       })
       .catch(err => {
         console.error("Could not load customization:", err);
-        // Fallback slots
         setTimeSlots(["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00"]);
       });
   }, []);
@@ -95,7 +97,6 @@ const App = () => {
       } catch (e) { /* ignore */ }
 
       // Fetch Saved Availability from Server (Authoritative Load)
-      // UPDATED URL: matches server.js
       fetch(`${API_BASE_URL}/api/availability/${safeName}.json`)
         .then(res => res.ok ? res.json() : null)
         .then(data => { if (data) applyAvailabilityData(data); })
@@ -132,20 +133,15 @@ const App = () => {
 
   const fetchSchedule = async (name) => {
     try {
-      // UPDATED URL: matches server.js
       const res = await fetch(`${API_BASE_URL}/api/schedule`);
       if (!res.ok) return;
       const payload = await res.json();
-
-      // server.js returns { ok: true, schedule: [...] }
       const data = payload.schedule || [];
 
       const myName = name || (user && user.name);
       if (!myName) return;
       const myShifts = {};
 
-      // Since schedule structure might be a direct array or wrapped
-      // Check if data is array first
       const daysArray = Array.isArray(data) ? data : (data.days || []);
 
       daysArray.forEach(dayBlock => {
@@ -211,6 +207,52 @@ const App = () => {
     if (data.max_hours) setMaxHours(data.max_hours);
   };
 
+  // --- NEW: AI Handler ---
+  const handleAISubmit = async (e) => {
+    e.preventDefault();
+    if (!aiPrompt.trim()) return;
+
+    setAiLoading(true);
+    setAiResponse(null);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/ai-availability`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: aiPrompt })
+      });
+
+      const data = await res.json();
+      
+      if (data.actions) {
+        const newSchedule = { ...schedule };
+        
+        data.actions.forEach(action => {
+          const { day, start, end, status } = action;
+          const targetSlots = fillSlots(start, end);
+          
+          targetSlots.forEach(time => {
+            // Find closest matching valid slot if direct match fails (fuzzy matching)
+            const exactSlot = timeSlots.find(t => t === time);
+            if (exactSlot) {
+               newSchedule[`${day}-${exactSlot}`] = status;
+            }
+          });
+        });
+
+        setSchedule(newSchedule);
+        setAiResponse(`Updated ${data.actions.length} ranges based on your request.`);
+      }
+
+    } catch (err) {
+      console.error(err);
+      setAiResponse("Sorry, I couldn't process that request.");
+    } finally {
+      setAiLoading(false);
+      setAiPrompt('');
+    }
+  };
+
   const handleSubmit = async () => {
     const addMinutes = (timeStr, minsToAdd) => {
       const [hours, minutes] = timeStr.split(':').map(Number);
@@ -271,18 +313,16 @@ const App = () => {
       });
 
       if (response.ok) {
-        const resData = await response.json(); // Wait for server to confirm scheduler ran
+        const resData = await response.json(); 
         console.log("Scheduler Output:", resData.stdout);
-
         alert("✅ Availability saved & Schedule updated!");
-
         try {
           const safe = (finalData.name || 'unknown').replace(/[^a-z0-9-_.]/gi, '_');
           localStorage.setItem(`lastSavedAvailability_${safe}`, JSON.stringify(finalData));
         } catch (e) { }
 
         applyAvailabilityData(finalData);
-        await fetchSchedule(); // Refresh the grid with new assignments immediately!
+        await fetchSchedule();
       } else {
         alert("❌ Failed to save.");
       }
@@ -325,8 +365,10 @@ const App = () => {
       <div className="max-w-6xl mx-auto mb-6 flex justify-between items-end">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 mb-2">{viewMode === 'input' ? 'Select Your Preferences' : 'Your Upcoming Shifts'}</h1>
-          <p className="text-slate-500">{viewMode === 'input' ? 'Click or drag across slots to change their status.' : 'These are the shifts assigned to you by your manager.'}</p>
+          <p className="text-slate-500">{viewMode === 'input' ? 'Click or drag across slots, or ask the AI to help.' : 'These are the shifts assigned to you by your manager.'}</p>
         </div>
+        
+        {/* Legend */}
         {viewMode === 'input' && (
           <div className="flex gap-4 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm">
             {Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -338,6 +380,36 @@ const App = () => {
           </div>
         )}
       </div>
+
+      {/* NEW: AI Chatbot Component */}
+      {viewMode === 'input' && (
+        <div className="max-w-6xl mx-auto mb-6">
+          <div className="bg-gradient-to-r from-indigo-50 to-white border border-indigo-100 rounded-xl p-4 shadow-sm flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+              <Sparkles size={20} />
+            </div>
+            <div className="flex-1">
+              <form onSubmit={handleAISubmit} className="flex gap-2">
+                <input 
+                  type="text" 
+                  value={aiPrompt}
+                  onChange={(e) => setAiPrompt(e.target.value)}
+                  placeholder='e.g., "I can only work on weekends" or "I am unavailable on Monday evenings"'
+                  className="flex-1 border border-slate-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+                <button 
+                  type="submit" 
+                  disabled={aiLoading || !aiPrompt.trim()}
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {aiLoading ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
+                </button>
+              </form>
+              {aiResponse && <div className="text-xs text-indigo-600 mt-1 font-medium ml-1">{aiResponse}</div>}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Grid Card */}
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
