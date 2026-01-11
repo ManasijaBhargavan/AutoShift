@@ -95,7 +95,7 @@ const App = () => {
 
       // Fetch Saved Availability from Server (Authoritative Load)
       // UPDATED URL: matches server.js
-      fetch(`/api/availability/${safeName}`)
+      fetch(`/api/availability/${safeName}.json`)
         .then(res => res.ok ? res.json() : null)
         .then(data => { if(data) applyAvailabilityData(data); })
         .catch(() => console.log("No saved availability found."));
