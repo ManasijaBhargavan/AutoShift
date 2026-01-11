@@ -182,7 +182,7 @@ const Employer = () => {
       // You can increase this delay if your python script is very slow
       setTimeout(async () => {
         try {
-          const schedRes = await fetch('http://localhost:3001/api/schedule');
+          const schedRes = await fetch('/api/schedule');
           const schedData = await schedRes.json();
           
           if (schedData.schedule) {
