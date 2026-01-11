@@ -4,6 +4,7 @@ import {
   ChevronLeft, ChevronRight, Clock, Users, 
   LayoutGrid, Sliders, UserPlus, X, Plus, Minus, BarChart3
 } from 'lucide-react';
+import { Logo } from './Logo';
 
 import { API_BASE_URL } from './config';
 
@@ -300,13 +301,14 @@ const Employer = () => {
       {/* --- HEADER --- */}
       <div className="max-w-6xl mx-auto mb-8 flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-100">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold">
-            <LayoutGrid size={20} />
-          </div>
-          <div>
-            <h2 className="font-bold text-slate-800">Manager Dashboard</h2>
-            <span className="text-xs text-slate-500 uppercase tracking-wider">Admin View</span>
-          </div>
+           <Logo size={42} />
+           {/* You can keep the 'Manager Dashboard' text if you want, 
+               or let the Logo text be the main title. 
+               Here is how to put a divider between them: */}
+           <div className="h-8 w-px bg-slate-200 mx-2"></div>
+           <div>
+             <h2 className="font-bold text-slate-700 text-sm">Manager Portal</h2>
+           </div>
         </div>
         <div className="flex gap-4">
           <button onClick={() => setShowAddModal(true)} className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-md transition-all shadow-md shadow-emerald-200">
