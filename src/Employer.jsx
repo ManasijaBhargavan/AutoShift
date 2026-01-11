@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { 
   Save, Download, Copy, Settings, Calendar, 
   ChevronLeft, ChevronRight, Clock, Users, 
-  LayoutGrid, Sliders 
+  LayoutGrid, Sliders, UserPlus, X 
 } from 'lucide-react';
 
 const PALETTE = [
@@ -68,6 +68,12 @@ const Employer = () => {
   const [savedCustomization, setSavedCustomization] = useState({});
   const [schedule, setSchedule] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
+
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newEmpName, setNewEmpName] = useState('');
+  const [newEmpPass, setNewEmpPass] = useState('');
+  const [newEmpRole, setNewEmpRole] = useState('Server');
+  const [isAdding, setIsAdding] = useState(false);
 
   const days = Array.isArray(schedule) ? schedule : [];
 
@@ -203,6 +209,41 @@ const Employer = () => {
     }
   }
 
+  async function handleAddEmployee(e) {
+    e.preventDefault();
+    if (!newEmpName || !newEmpPass) return alert("Name and password required");
+    
+    setIsAdding(true);
+    try {
+      const res = await fetch('http://localhost:3001/api/employees', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newEmpName,
+          password: newEmpPass,
+          role: newEmpRole
+        })
+      });
+      
+      const data = await res.json();
+      
+      if (res.ok) {
+        alert(`✅ Employee "${newEmpName}" created successfully!`);
+        setShowAddModal(false);
+        setNewEmpName('');
+        setNewEmpPass('');
+        setNewEmpRole('Server');
+        // Ideally, refresh your employee list here if you had one displayed
+      } else {
+        alert(`❌ Error: ${data.error}`);
+      }
+    } catch (err) {
+      alert('❌ Failed to connect to server');
+    } finally {
+      setIsAdding(false);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans p-8">
       
@@ -218,24 +259,35 @@ const Employer = () => {
           </div>
         </div>
 
-        {/* Tab Switcher */}
-        <div className="flex bg-slate-100 p-1 rounded-lg">
+        <div className="flex gap-4">
+          
+          {/* 1. THE MISSING BUTTON */}
           <button
-            onClick={() => setActiveTab('visualizer')}
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md transition-all ${
-              activeTab === 'visualizer' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-            }`}
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-md transition-all shadow-md shadow-emerald-200"
           >
-            <Calendar size={16} /> Schedule
+            <UserPlus size={16} /> New Employee
           </button>
-          <button
-            onClick={() => setActiveTab('settings')}
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md transition-all ${
-              activeTab === 'settings' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-            }`}
-          >
-            <Sliders size={16} /> Configuration
-          </button>
+
+          {/* 2. The Existing Tab Switcher */}
+          <div className="flex bg-slate-100 p-1 rounded-lg">
+            <button
+              onClick={() => setActiveTab('visualizer')}
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md transition-all ${
+                activeTab === 'visualizer' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              <Calendar size={16} /> Schedule
+            </button>
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md transition-all ${
+                activeTab === 'settings' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              <Sliders size={16} /> Configuration
+            </button>
+          </div>
         </div>
       </div>
 
@@ -488,6 +540,84 @@ const Employer = () => {
           </div>
         )}
       </div>
+
+      {/* --- ADD EMPLOYEE MODAL --- */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative">
+            <button 
+              onClick={() => setShowAddModal(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
+            >
+              <X size={20} />
+            </button>
+            
+            <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <UserPlus className="text-emerald-600" size={24}/> Add New Employee
+            </h3>
+            
+            <form onSubmit={handleAddEmployee} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">Full Name</label>
+                <input 
+                  autoFocus
+                  type="text" 
+                  value={newEmpName}
+                  onChange={e => setNewEmpName(e.target.value)}
+                  placeholder="e.g. Michael Scott"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">Password</label>
+                <input 
+                  type="text" // Using text so you can see it, change to 'password' if preferred
+                  value={newEmpPass}
+                  onChange={e => setNewEmpPass(e.target.value)}
+                  placeholder="Set a temporary password"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">Role</label>
+                <select 
+                  value={newEmpRole}
+                  onChange={e => setNewEmpRole(e.target.value)}
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
+                >
+                  <option value="Server">Server</option>
+                  <option value="Chef">Chef</option>
+                  <option value="Cook">Cook</option>
+                  <option value="Busser">Busser</option>
+                  <option value="Manager">Manager</option>
+                  <option value="Host">Host</option>
+                  <option value="Bartender">Bartender</option>
+                </select>
+              </div>
+
+              <div className="pt-4 flex justify-end gap-3">
+                <button 
+                  type="button" 
+                  onClick={() => setShowAddModal(false)}
+                  className="px-4 py-2 text-slate-600 font-semibold hover:bg-slate-100 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={isAdding || !newEmpName || !newEmpPass}
+                  className="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white font-bold rounded-lg shadow-lg shadow-emerald-200 transition-all"
+                >
+                  {isAdding ? 'Creating...' : 'Create Account'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
