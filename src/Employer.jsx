@@ -125,6 +125,23 @@ const Employer = () => {
     }
   }
 
+  async function saveToServer() {
+    try {
+      const res = await fetch('http://localhost:3001/api/customization', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(customization)
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(()=>({error:res.statusText}));
+        throw new Error(err.error || res.statusText);
+      }
+      alert('Saved customization.json on server');
+    } catch (e) {
+      alert('Save failed: ' + e.message);
+    }
+  }
+
   return (
     <div className="min-h-screen flex items-start justify-center bg-slate-50 p-6">
       <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg p-6">
@@ -185,9 +202,10 @@ const Employer = () => {
 
         {/* Customization editor (moved below schedule) */}
         <div className="w-full mt-6 border rounded-md p-4 bg-white">
-          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold">Customization</h2>
             <div className="space-x-2">
+              <button onClick={saveToServer} className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md">Save</button>
               <button onClick={downloadJson} className="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md">Download</button>
               <button onClick={copyJson} className="px-3 py-1 bg-slate-600 hover:bg-slate-700 text-white rounded-md">Copy</button>
             </div>
