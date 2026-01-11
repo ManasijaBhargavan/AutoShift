@@ -60,23 +60,53 @@ app.get('/api/customization', async (req, res) => {
 app.post('/api/customization', async (req, res) => {
   const body = req.body;
   if (!body || typeof body !== 'object') return res.status(400).json({error: 'Invalid JSON body'});
+  
   try {
+    // 1. Save the file first
     await fs.writeFile(DATA_PATH, JSON.stringify(body, null, 2), 'utf8');
-    // After saving customization, run the scheduler to regenerate schedule.json
-    exec('python3 scheduler.py', {cwd: process.cwd(), timeout: 120000}, async (err, stdout, stderr) => {
+    
+    // 2. Respond to the browser IMMEDIATELY (Don't wait for Python)
+    res.json({ ok: true, status: 'saving', message: "Configuration saved. Generating schedule in background..." });
+
+    // 3. Run Python in the background
+    console.log("Triggering scheduler...");
+    exec('python3 scheduler.py', {cwd: process.cwd(), timeout: 120000}, (err, stdout, stderr) => {
       if (err) {
-        console.error('Scheduler error:', err, stderr);
-        return res.status(500).json({error: 'Saved but scheduler failed', details: stderr || String(err)});
-      }
-      try {
-        const txt = await fs.readFile(path.resolve(process.cwd(), 'schedule.json'), 'utf8');
-        const json = JSON.parse(txt);
-        res.json({ok: true, schedule: json, stdout});
-      } catch (e) {
-        res.json({ok: true, note: 'Saved but could not read schedule.json', details: String(e), stdout});
+        console.error('Background Scheduler Error:', stderr || err);
+      } else {
+        console.log('Background Scheduler Finished Successfully');
       }
     });
+
   } catch (err) {
+    // Only happens if file writing fails
+    res.status(500).json({error: String(err)});
+  }
+});
+
+app.post('/api/customization', async (req, res) => {
+  const body = req.body;
+  if (!body || typeof body !== 'object') return res.status(400).json({error: 'Invalid JSON body'});
+  
+  try {
+    // 1. Save the file first
+    await fs.writeFile(DATA_PATH, JSON.stringify(body, null, 2), 'utf8');
+    
+    // 2. Respond to the browser IMMEDIATELY (Don't wait for Python)
+    res.json({ ok: true, status: 'saving', message: "Configuration saved. Generating schedule in background..." });
+
+    // 3. Run Python in the background
+    console.log("Triggering scheduler...");
+    exec('python3 scheduler.py', {cwd: process.cwd(), timeout: 120000}, (err, stdout, stderr) => {
+      if (err) {
+        console.error('Background Scheduler Error:', stderr || err);
+      } else {
+        console.log('Background Scheduler Finished Successfully');
+      }
+    });
+
+  } catch (err) {
+    // Only happens if file writing fails
     res.status(500).json({error: String(err)});
   }
 });

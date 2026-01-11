@@ -1,5 +1,4 @@
 name: Build and Deploy
-
 on:
   push:
     branches:
@@ -8,16 +7,47 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-
+    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
       - name: Install Dependencies
         run: npm install
-
+      
       - name: Build Frontend
         run: npm run build
-
-      - name: Ensure Python Permissions
+      
+      - name: Deploy to Nginx Directory
+        run: |
+          # Path where nginx serves from (update if different)
+          NGINX_DIR="/home/azureuser/AutoShift/dist"
+          
+          # Backup old build (optional)
+          if [ -d "$NGINX_DIR" ]; then
+            rm -rf "$NGINX_DIR.backup"
+            mv "$NGINX_DIR" "$NGINX_DIR.backup"
+          fi
+          
+          # Copy new build
+          mkdir -p "$NGINX_DIR"
+          cp -r dist/* "$NGINX_DIR/"
+          
+          # Ensure proper permissions
+          chmod -R 755 "$NGINX_DIR"
+      
+      - name: Restart Backend (PM2)
+        run: |
+          # Restart the Node.js backend if needed
+          pm2 restart autoshift-backend || pm2 start server.js --name autoshift-backend
+      
+      - name: Ensure Python Scripts are Executable
         run: chmod +x *.py
+      
+      - name: Reload Nginx
+        run: sudo systemctl reload nginx

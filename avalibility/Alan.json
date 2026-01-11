@@ -1,6 +1,6 @@
 {
-  "name": "Diana",
-  "role": "Manager",
+  "name": "Alan",
+  "role": "Chef",
   "max_hours": 25,
   "availability": {
     "Monday": {
