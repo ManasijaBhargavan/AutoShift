@@ -263,8 +263,7 @@ const App = () => {
     };
 
     try {
-      // UPDATED URL: matches server.js POST endpoint
-      const response = await fetch('http://localhost:3001/api/save-availability', {
+      const response = await fetch('/api/save-availability', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(finalData),
