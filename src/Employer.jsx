@@ -2,6 +2,21 @@ import React, {useMemo, useState} from 'react';
 // scheduleData now fetched from server
 import customizationData from '../customization.json';
 
+const [scheduleData, setScheduleData] = useState([]);
+
+useEffect(() => {
+  fetch('http://20.64.242.172/api/schedule')
+    .then(res => res.json())
+    .then(data => setScheduleData(data));
+}, []);
+
+const handleSolve = async () => {
+  const res = await fetch('http://20.64.242.172/api/solve', { method: 'POST' });
+  const newSchedule = await res.json();
+  if (newSchedule.error) alert(newSchedule.error);
+  else setScheduleData(newSchedule);
+};
+
 const PALETTE = [
   '#ef476f', '#ffd166', '#06d6a0', '#118ab2', '#073b4c', '#8338ec', '#ff6b6b', '#4cc9f0', '#ffd6a5', '#a0c4ff'
 ];
