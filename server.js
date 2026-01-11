@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json({limit: '1mb'}));
 
 const DATA_PATH = path.resolve(process.cwd(), 'customization.json');
-const AVAIL_DIR = path.resolve(process.cwd(), 'avalibility');
+const AVAIL_DIR = path.resolve(process.cwd(), 'availability');
 const LOGIN_PATH = path.resolve(process.cwd(), 'public', 'login.json');
 
 async function ensureAvailabilityFilesFromLogin() {
@@ -163,4 +163,47 @@ app.listen(PORT, ()=>{
   }).catch(()=>{
     console.log(`Customization server running on http://localhost:${PORT}`);
   });
+});
+
+app.post('/api/employees', async (req, res) => {
+  const { name, password, role } = req.body;
+
+  if (!name || !password || !role) {
+    return res.status(400).json({ error: 'Missing name, password, or role' });
+  }
+
+  try {
+    // 1. Update login.json
+    const loginTxt = await fs.readFile(LOGIN_PATH, 'utf8');
+    const loginData = JSON.parse(loginTxt || '{"employees":[]}');
+    
+    // Check for duplicate
+    if (loginData.employees.find(e => e.name.toLowerCase() === name.toLowerCase())) {
+      return res.status(409).json({ error: 'Employee already exists' });
+    }
+
+    loginData.employees.push({ name, password, role });
+    await fs.writeFile(LOGIN_PATH, JSON.stringify(loginData, null, 2), 'utf8');
+
+    // 2. Create the Availability File immediately
+    await fs.mkdir(AVAIL_DIR, { recursive: true });
+    const safeName = name.replace(/[^a-z0-9-_\.]/gi, '_');
+    const availTarget = path.join(AVAIL_DIR, `${safeName}.json`);
+    
+    const defaultAvail = {
+      name,
+      role,
+      max_hours: 40,
+      availability: {}
+    };
+
+    await fs.writeFile(availTarget, JSON.stringify(defaultAvail, null, 2), 'utf8');
+
+    console.log(`✅ Created new user: ${name}`);
+    res.json({ ok: true, message: 'Employee added successfully' });
+
+  } catch (err) {
+    console.error("Error adding employee:", err);
+    res.status(500).json({ error: String(err) });
+  }
 });
