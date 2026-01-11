@@ -1,32 +1,15 @@
-name: Build and Deploy
-
+name: Simple Deploy
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   deploy:
-    # This is the magic line that points to your VM
     runs-on: self-hosted
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
+      - uses: actions/checkout@v4
+      
       - name: Build Frontend
         run: |
           npm install
-          npm run build
-
-      - name: Deploy to Nginx Folder
-        run: |
-          # Since the runner is on the VM, we just copy files locally
-          # Replace '~/dist' with the actual path Nginx is watching
-          rm -rf ~/dist/*
-          cp -r dist/* ~/dist/
+          npm run build  # This creates the /dist folder on your VM
