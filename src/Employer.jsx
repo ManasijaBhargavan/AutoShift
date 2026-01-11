@@ -1,5 +1,6 @@
 import React, {useMemo, useState} from 'react';
 import scheduleData from '../schedule.json';
+import customizationData from '../customization.json';
 
 const PALETTE = [
   '#ef476f', '#ffd166', '#06d6a0', '#118ab2', '#073b4c', '#8338ec', '#ff6b6b', '#4cc9f0', '#ffd6a5', '#a0c4ff'
@@ -62,6 +63,7 @@ function buildShiftsForDay(day) {
 
 const Employer = () => {
   const [dayIndex, setDayIndex] = useState(0);
+  const [customization, setCustomization] = useState(customizationData || {});
 
   const days = Array.isArray(scheduleData) ? scheduleData : [];
 
@@ -86,6 +88,43 @@ const Employer = () => {
     return buildShiftsForDay(day);
   }, [days, dayIndex]);
 
+
+  function applyStructuredChange(path, value) {
+    const next = JSON.parse(JSON.stringify(customization || {}));
+    const parts = path.split('.');
+    let cur = next;
+    for (let i=0;i<parts.length-1;i++) {
+      const p = parts[i];
+      if (cur[p] == null) cur[p] = {};
+      cur = cur[p];
+    }
+    cur[parts[parts.length-1]] = value;
+    setCustomization(next);
+  }
+
+  
+
+  function downloadJson() {
+    const blob = new Blob([JSON.stringify(customization, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'customization.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  async function copyJson() {
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(customization, null, 2));
+      alert('Customization copied to clipboard');
+    } catch (e) {
+      alert('Copy failed: '+e.message);
+    }
+  }
+
   return (
     <div className="min-h-screen flex items-start justify-center bg-slate-50 p-6">
       <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg p-6">
@@ -98,6 +137,7 @@ const Employer = () => {
           </div>
         </div>
 
+        
         <div className="w-full overflow-auto border rounded-md p-4 bg-white">
           <div className="mb-2 text-sm text-slate-500">Hours (0–24)</div>
           <div className="relative w-full" style={{minWidth: '800px'}}>
@@ -139,6 +179,62 @@ const Employer = () => {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Customization editor (moved below schedule) */}
+        <div className="w-full mt-6 border rounded-md p-4 bg-white">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold">Customization</h2>
+            <div className="space-x-2">
+              <button onClick={downloadJson} className="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md">Download</button>
+              <button onClick={copyJson} className="px-3 py-1 bg-slate-600 hover:bg-slate-700 text-white rounded-md">Copy</button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <div className="text-sm font-medium mb-2">Constraints</div>
+              <div className="space-y-3">
+                <label className="flex items-center justify-between">
+                  <span className="text-sm">Min shift length</span>
+                  <input type="number" value={customization.constraints?.min_shift_length || ''} onChange={e=>applyStructuredChange('constraints.min_shift_length', Number(e.target.value))} className="w-32 border rounded p-2" />
+                </label>
+                <label className="flex items-center justify-between">
+                  <span className="text-sm">Max shift length</span>
+                  <input type="number" value={customization.constraints?.max_shift_length || ''} onChange={e=>applyStructuredChange('constraints.max_shift_length', Number(e.target.value))} className="w-32 border rounded p-2" />
+                </label>
+                <label className="flex items-center justify-between">
+                  <span className="text-sm">Daily max hours</span>
+                  <input type="number" value={customization.constraints?.daily_max_hours || ''} onChange={e=>applyStructuredChange('constraints.daily_max_hours', Number(e.target.value))} className="w-32 border rounded p-2" />
+                </label>
+                <label className="flex items-center justify-between">
+                  <span className="text-sm">Global staff floor</span>
+                  <input type="number" value={customization.constraints?.global_staff_floor || ''} onChange={e=>applyStructuredChange('constraints.global_staff_floor', Number(e.target.value))} className="w-32 border rounded p-2" />
+                </label>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Business hours</span>
+                  <div className="flex items-center space-x-2">
+                    <input type="number" value={customization.constraints?.business_hours?.start ?? ''} onChange={e=>applyStructuredChange('constraints.business_hours.start', Number(e.target.value))} className="w-20 border rounded p-2" />
+                    <span className="text-sm">to</span>
+                    <input type="number" value={customization.constraints?.business_hours?.end ?? ''} onChange={e=>applyStructuredChange('constraints.business_hours.end', Number(e.target.value))} className="w-20 border rounded p-2" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div className="text-sm font-medium mb-2">Name Colors</div>
+              <div className="flex flex-wrap gap-2 max-h-40 overflow-auto p-2 border rounded bg-white">
+                {allNames.map((n)=> (
+                  <div key={n} className="flex items-center space-x-2 bg-slate-50 rounded px-2 py-1 shadow-sm">
+                    <div style={{width:14,height:14,background:nameToColor[n]||'#999',borderRadius:4}} />
+                    <div className="text-sm">{n}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="text-xs text-slate-500 mt-2">Colors assigned automatically. Download to save custom settings.</div>
             </div>
           </div>
         </div>
