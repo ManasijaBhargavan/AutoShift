@@ -1,6 +1,48 @@
 {
   "name": "Charlie",
   "role": "Busser",
-  "max_hours": 40,
-  "availability": {}
+  "max_hours": 25,
+  "availability": {
+    "Monday": {
+      "unavailable": [],
+      "preferred": [
+        "14:00-19:30"
+      ]
+    },
+    "Tuesday": {
+      "unavailable": [],
+      "preferred": [
+        "10:00-13:30",
+        "16:00-18:00"
+      ]
+    },
+    "Wednesday": {
+      "unavailable": [
+      ],
+      "preferred": [
+        "10:00-13:30"
+      ]
+    },
+    "Thursday": {
+      "unavailable": [
+      ],
+      "preferred": []
+    },
+    "Friday": {
+      "unavailable": [
+      ],
+      "preferred": []
+    },
+    "Saturday": {
+      "unavailable": [],
+      "preferred": [
+        "10:30-13:30"
+      ]
+    },
+    "Sunday": {
+      "unavailable": [
+      ],
+      "preferred": []
+    }
+  }
 }

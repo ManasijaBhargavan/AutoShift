@@ -1,3 +1,759 @@
-{
-  "error": "Infeasible: On Saturday at 12:00, you require 3 Busser(s), but only 1 are available due to individual availability constraints."
-}
+[
+  {
+    "day": "Monday",
+    "hours": [
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "day": "Tuesday",
+    "hours": [
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "day": "Wednesday",
+    "hours": [
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Billy"
+          ],
+          "Chef": [
+            "Andy"
+          ],
+          "Manager": [
+            "Charles"
+          ],
+          "Server": [
+            "David"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "day": "Thursday",
+    "hours": [
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "day": "Friday",
+    "hours": [
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "day": "Saturday",
+    "hours": [
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Billy",
+            "Charlie"
+          ],
+          "Chef": [
+            "Andy",
+            "Bob"
+          ],
+          "Manager": [
+            "Charles",
+            "Diana"
+          ],
+          "Server": [
+            "David",
+            "Henry"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Billy",
+            "Charlie"
+          ],
+          "Chef": [
+            "Andy",
+            "Bob"
+          ],
+          "Manager": [
+            "Charles",
+            "Diana"
+          ],
+          "Server": [
+            "David",
+            "Henry"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "day": "Sunday",
+    "hours": [
+      {
+        "time": "14:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "15:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "16:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "17:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "18:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      },
+      {
+        "time": "19:00",
+        "roles": {
+          "Busser": [
+            "Bill"
+          ],
+          "Chef": [
+            "Alan"
+          ],
+          "Manager": [
+            "Carly"
+          ],
+          "Server": [
+            "Alice"
+          ]
+        }
+      }
+    ]
+  }
+]
