@@ -41,20 +41,20 @@ const Login = () => {
       return;
     }
 
-    const trimmedName = name.trim();
-    const trimmedEmployer = employerPassword.trim();
-    const trimmedEmployee = employeePassword.trim();
+    // 1. Check Employer List (Admins)
+    const employerMatch = (loginData.employers || []).find(
+      emp => emp.username.toLowerCase() === u && emp.password === p
+    );
 
-    // Employer flow: if employer password provided and no name
-    if (trimmedEmployer !== '' && trimmedName === '') {
-      if (loginData.employerPassword && trimmedEmployer === loginData.employerPassword) {
-        // SAVE EMPLOYER DATA
-        const employerData = { name: 'Manager', role: 'employer' }; 
-        localStorage.setItem('currentUser', JSON.stringify(employerData));
-        navigate('/employer');
-      } else {
-        alert('Invalid employer password');
-      }
+    if (employerMatch) {
+      // Pass the username to the employer dashboard if needed
+      const userToSave = { 
+        name: employerMatch.username, 
+        role: 'employer',
+        ...employerMatch 
+      };
+      localStorage.setItem('currentUser', JSON.stringify(userToSave));
+      navigate('/employer');
       return;
     }
 
@@ -64,30 +64,16 @@ const Login = () => {
     );
 
     if (employeeMatch) {
-      navigate('/app', { state: { user: employeeMatch.name } });
+      const userToSave = { 
+        role: 'employee', 
+        ...employeeMatch // This includes .name, .id, etc.
+      };
+      localStorage.setItem('currentUser', JSON.stringify(userToSave));
+      navigate('/app');
       return;
     }
 
-    // Define a helper to save and go
-    const loginUser = () => {
-      // Create a user object to save. We include 'role: employee' just in case.
-      const userToSave = { ...match, role: 'employee' }; 
-      
-      localStorage.setItem('currentUser', JSON.stringify(userToSave)); // <--- SAVED HERE
-      navigate('/app');
-    };
-    
-  // Check password if it exists
-    if (match.password && match.password !== '') {
-      if (trimmedEmployee === match.password) {
-        loginUser(); // <--- Call helper
-      } else {
-        alert('Invalid employee password');
-      }
-    } else {
-      // No password required
-      loginUser(); // <--- Call helper
-    }
+    alert('Invalid username or password.');
   };
 
   return (

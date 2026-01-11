@@ -62,7 +62,7 @@ const App = () => {
       // Now you can set this to state: setCurrentUser(user);
     } else {
       // If they bypass login, kick them out
-      window.location.href = '/';
+      //window.location.href = '/';
     }
   }, []);
 
@@ -98,7 +98,7 @@ const App = () => {
   };
 
   const handleDownload = () => {
-    // 1. Helper to add minutes to a time string "08:00" + 30 -> "08:30"
+    // 1. Helper to add minutes
     const addMinutes = (timeStr, minsToAdd) => {
       const [hours, minutes] = timeStr.split(':').map(Number);
       const date = new Date();
@@ -106,67 +106,65 @@ const App = () => {
       return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
     };
 
-    // 2. The Logic to merge consecutive slots
+    // 2. Logic to merge consecutive slots
     const getRangesForStatus = (day, targetStatus) => {
       const ranges = [];
       let startTime = null;
       let lastSlotTime = null;
 
-      // Iterate through every slot in order
       for (let i = 0; i < TIME_SLOTS.length; i++) {
         const time = TIME_SLOTS[i];
         const key = `${day}-${time}`;
-        // Default to 'available' if not clicked
         const currentStatus = schedule[key] || 'available';
 
         if (currentStatus === targetStatus) {
-          // If this is the start of a streak
-          if (!startTime) {
-            startTime = time;
-          }
-          // Keep track of the most recent slot in this streak
+          if (!startTime) startTime = time;
           lastSlotTime = time;
         } else {
-          // The streak ended (or never started)
           if (startTime) {
-            // Close the previous range. 
-            // End time = last slot + duration (e.g., 8:30 + 30m = 9:00)
-            const endTime = addMinutes(lastSlotTime, 30);
+            const endTime = addMinutes(lastSlotTime, 30); // Use 30 since that's your slot interval
             ranges.push(`${startTime}-${endTime}`);
-
-            // Reset
             startTime = null;
             lastSlotTime = null;
           }
         }
       }
 
-      // Edge Case: If the streak goes all the way to the end of the day
       if (startTime) {
         const endTime = addMinutes(lastSlotTime, 30);
         ranges.push(`${startTime}-${endTime}`);
       }
-
       return ranges;
     };
 
-    // 3. Build the final object
-    const formattedData = {};
-
+    // 3. Build the availability object first
+    const availabilityData = {};
     DAYS.forEach(day => {
-      formattedData[day] = {
+      availabilityData[day] = {
         unavailable: getRangesForStatus(day, 'unavailable'),
         preferred: getRangesForStatus(day, 'preferred')
       };
     });
 
-    // 4. Download
-    const fileData = JSON.stringify(formattedData, null, 2);
+    // 4. Construct the Final JSON Object with User Info
+    const finalData = {
+      name: user ? user.name : "Unknown Employee",
+      role: user && user.role ? user.role : "Server", // Default to 'Server' if missing
+      max_hours: 40, // Default value as requested
+      availability: availabilityData
+    };
+
+    // 5. Download
+    const fileData = JSON.stringify(finalData, null, 2);
     const blob = new Blob([fileData], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "shift_preferences.json";
+
+    // Create a filename like "Anthony_preferences.json"
+    const safeName = user ? user.name.replace(/\s+/g, '_') : 'employee';
+    link.download = `${safeName}_preferences.json`;
+
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -181,7 +179,9 @@ const App = () => {
           <Calendar className="w-6 h-6" />
           <span className="font-semibold tracking-wide uppercase text-sm">Scheduler 1.0</span>
         </div>
-        <h1 className="text-4xl font-bold mb-4 text-slate-900">{`Welcome, ${user.name}.`}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-slate-900">
+          {user ? `Welcome, ${user.name}.` : 'Welcome'}
+        </h1>
         <p className="text-slate-500 text-lg">
           Click the slots below to indicate when you can work.
         </p>
