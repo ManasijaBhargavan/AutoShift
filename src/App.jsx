@@ -38,7 +38,7 @@ const App = () => {
   // --- 1. NEW: Fetch Business Hours from Server API ---
   useEffect(() => {
     // UPDATED: Now fetches from the API endpoint, not the file directly
-    fetch('http://localhost:3001/api/customization')
+    fetch('/api/customization')
       .then(res => res.json())
       .then(data => {
         // Safe check in case data is missing
@@ -95,7 +95,7 @@ const App = () => {
 
       // Fetch Saved Availability from Server (Authoritative Load)
       // UPDATED URL: matches server.js
-      fetch(`http://localhost:3001/api/availability/${safeName}`)
+      fetch(`/api/availability/${safeName}`)
         .then(res => res.ok ? res.json() : null)
         .then(data => { if (data) applyAvailabilityData(data); })
         .catch(() => console.log("No saved availability found."));
