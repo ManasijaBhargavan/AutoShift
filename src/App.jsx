@@ -109,7 +109,7 @@ const App = () => {
   const getNextStatus = (currentStatus) => {
     if (currentStatus === 'unavailable') return 'preferred';
     if (currentStatus === 'available') return 'unavailable';
-    return 'preferred';
+    return 'available';
   };
 
   const handleMouseDown = (day, time) => {
