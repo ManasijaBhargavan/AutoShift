@@ -1,46 +1,63 @@
 {
   "name": "Alice",
   "role": "Server",
-  "max_hours": 25,
+  "max_hours": 40,
   "availability": {
     "Monday": {
-      "unavailable": [],
-      "preferred": [
-        "14:00-20:00"
-      ]
+      "unavailable": [
+        "14:00-15:30"
+      ],
+      "preferred": []
     },
     "Tuesday": {
-      "unavailable": [],
+      "unavailable": [
+        "15:30-16:30"
+      ],
       "preferred": [
-        "13:00-13:30",
-        "16:00-18:00"
+        "17:00-18:00"
       ]
     },
     "Wednesday": {
-      "unavailable": [],
+      "unavailable": [
+        "15:00-15:30",
+        "16:30-17:00"
+      ],
       "preferred": [
-        "13:00-13:30"
+        "17:00-18:30"
       ]
     },
     "Thursday": {
       "unavailable": [
-        "16:00-19:00"
+        "16:30-17:00"
       ],
-      "preferred": []
+      "preferred": [
+        "17:00-18:30",
+        "19:00-20:00"
+      ]
     },
     "Friday": {
-      "unavailable": [],
-      "preferred": []
+      "unavailable": [
+        "14:30-15:00",
+        "16:00-17:00"
+      ],
+      "preferred": [
+        "17:00-19:00",
+        "20:00-20:30"
+      ]
     },
     "Saturday": {
-      "unavailable": [],
+      "unavailable": [
+        "14:30-16:00"
+      ],
       "preferred": [
-        "13:00-13:30"
+        "17:00-18:30"
       ]
     },
     "Sunday": {
       "unavailable": [],
-      "preferred": []
+      "preferred": [
+        "18:00-18:30"
+      ]
     }
   }
 }
