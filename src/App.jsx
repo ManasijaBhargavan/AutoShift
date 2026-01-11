@@ -35,14 +35,18 @@ const App = () => {
   const [user, setCurrentUser] = useState(null);
   const [maxHours, setMaxHours] = useState(40);
 
-  // --- 1. NEW: Fetch Business Hours & Generate Slots ---
+  // --- 1. NEW: Fetch Business Hours from Server API ---
   useEffect(() => {
-    fetch('/customization.json')
+    // UPDATED: Now fetches from the API endpoint, not the file directly
+    fetch('http://localhost:3001/api/customization')
       .then(res => res.json())
       .then(data => {
+        // Safe check in case data is missing
+        if (!data.constraints || !data.constraints.business_hours) throw new Error("Invalid config");
+        
         const { start, end } = data.constraints.business_hours;
         
-        // Generate slots from start hour to end hour in 30min intervals
+        // Generate slots
         const generatedSlots = [];
         let current = new Date();
         current.setHours(start, 0, 0, 0);
@@ -61,9 +65,9 @@ const App = () => {
         setTimeSlots(generatedSlots);
       })
       .catch(err => {
-        console.error("Could not load customization.json", err);
-        // Fallback slots if file missing
-        setTimeSlots(["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00"]); 
+        console.error("Could not load customization:", err);
+        // Fallback slots
+        setTimeSlots(["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00"]); 
       });
   }, []);
 
@@ -83,14 +87,15 @@ const App = () => {
       // Fetch Assigned Shifts
       fetchSchedule(myName);
 
-      // Load Cached Availability
+      // Load Cached Availability (Fast Load)
       try {
         const cached = localStorage.getItem(`lastSavedAvailability_${safeName}`);
         if (cached) applyAvailabilityData(JSON.parse(cached));
       } catch (e) { /* ignore */ }
 
-      // Fetch Saved Availability from Server
-      fetch(`/api/availability/${safeName}`)
+      // Fetch Saved Availability from Server (Authoritative Load)
+      // UPDATED URL: matches server.js
+      fetch(`http://localhost:3001/api/availability/${safeName}`)
         .then(res => res.ok ? res.json() : null)
         .then(data => { if(data) applyAvailabilityData(data); })
         .catch(() => console.log("No saved availability found."));
@@ -126,25 +131,36 @@ const App = () => {
 
   const fetchSchedule = async (name) => {
     try {
-      const res = await fetch('/api/schedule'); 
+      // UPDATED URL: matches server.js
+      const res = await fetch('http://localhost:3001/api/schedule'); 
       if (!res.ok) return; 
       const payload = await res.json();
+      
+      // server.js returns { ok: true, schedule: [...] }
       const data = payload.schedule || [];
+      
       const myName = name || (user && user.name);
       if (!myName) return;
       const myShifts = {};
-      data.forEach(dayBlock => {
+      
+      // Since schedule structure might be a direct array or wrapped
+      // Check if data is array first
+      const daysArray = Array.isArray(data) ? data : (data.days || []);
+      
+      daysArray.forEach(dayBlock => {
         const dayName = dayBlock.day;
         if (dayBlock.hours) {
           dayBlock.hours.forEach(hourBlock => {
             const time = hourBlock.time;
-            Object.values(hourBlock.roles).forEach(employeeList => {
-              if (employeeList.includes(myName)) {
-                myShifts[`${dayName}-${time}`] = true;
-                const [h, m] = time.split(':');
-                if (m === '00') myShifts[`${dayName}-${h}:30`] = true;
-              }
-            });
+            if (hourBlock.roles) {
+              Object.values(hourBlock.roles).forEach(employeeList => {
+                if (employeeList.includes(myName)) {
+                  myShifts[`${dayName}-${time}`] = true;
+                  const [h, m] = time.split(':');
+                  if (m === '00') myShifts[`${dayName}-${h}:30`] = true;
+                }
+              });
+            }
           });
         }
       });
@@ -207,7 +223,6 @@ const App = () => {
       let startTime = null;
       let lastSlotTime = null;
 
-      // Use dynamic timeSlots state here
       for (let i = 0; i < timeSlots.length; i++) {
         const time = timeSlots[i];
         const key = `${day}-${time}`;
@@ -248,19 +263,26 @@ const App = () => {
     };
 
     try {
+      // UPDATED URL: matches server.js POST endpoint
       const response = await fetch('http://localhost:3001/api/save-availability', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(finalData),
       });
+      
       if (response.ok) {
-        alert("✅ Availability saved!");
+        const resData = await response.json(); // Wait for server to confirm scheduler ran
+        console.log("Scheduler Output:", resData.stdout);
+        
+        alert("✅ Availability saved & Schedule updated!");
+        
         try {
           const safe = (finalData.name || 'unknown').replace(/[^a-z0-9-_.]/gi, '_');
           localStorage.setItem(`lastSavedAvailability_${safe}`, JSON.stringify(finalData));
         } catch (e) { }
+        
         applyAvailabilityData(finalData);
-        await fetchSchedule();
+        await fetchSchedule(); // Refresh the grid with new assignments immediately!
       } else {
         alert("❌ Failed to save.");
       }
@@ -317,8 +339,10 @@ const App = () => {
         )}
       </div>
 
-      {/* Main Grid */}
+      {/* Main Grid Card */}
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        
+        {/* Scrollable Wrapper */}
         <div className="overflow-x-auto">
           <div className="p-8 min-w-max">
             
@@ -361,9 +385,9 @@ const App = () => {
               ))}
             </div>
           </div>
-        </div> {/* End of scrollable wrapper */}
+        </div>
 
-        {/* Footer - FIXED: Now outside the scrollable area, spans full width */}
+        {/* Footer Actions */}
         {viewMode === 'input' && (
           <div className="bg-slate-50 p-6 flex justify-end items-center border-t border-slate-100">
             <button
