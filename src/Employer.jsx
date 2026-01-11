@@ -5,6 +5,8 @@ import {
   LayoutGrid, Sliders, UserPlus, X, Plus, Minus, BarChart3
 } from 'lucide-react';
 
+import { API_BASE_URL } from './config';
+
 const PALETTE = [
   '#ef476f', '#ffd166', '#06d6a0', '#118ab2', '#073b4c', '#8338ec', '#ff6b6b', '#4cc9f0', '#ffd6a5', '#a0c4ff'
 ];
@@ -12,6 +14,7 @@ const PALETTE = [
 const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 // NEW: Define the roles available for global settings
 const ROLES = ['Server', 'Cook', 'Chef', 'Busser', 'Manager', 'Host', 'Bartender'];
+
 
 // --- LOGIC HELPER: Build Gantt Chart Rows ---
 function buildShiftsForDay(day) {
@@ -91,7 +94,7 @@ const Employer = () => {
     let mounted = true;
     
     // Fetch Settings
-    fetch('http://localhost:3001/api/customization')
+    fetch(`${API_BASE_URL}/api/customization`)
       .then(r => r.json())
       .then(j => {
         if (!mounted) return;
@@ -106,7 +109,7 @@ const Employer = () => {
       .catch(console.error);
 
     // Fetch Schedule
-    fetch('http://localhost:3001/api/schedule')
+    fetch(`${API_BASE_URL}/api/schedule`)
       .then(r => r.json())
       .then(j => {
         if (!mounted) return;
@@ -244,7 +247,7 @@ const Employer = () => {
 
   async function saveToServer() {
     try {
-      const res = await fetch('http://localhost:3001/api/customization', {
+      const res = await fetch(`${API_BASE_URL}/api/customization`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(draftCustomization)
@@ -253,7 +256,7 @@ const Employer = () => {
       alert('✅ Settings saved! Regenerating schedule (this may take a moment)...');
       setTimeout(async () => {
         try {
-          const schedRes = await fetch('http://localhost:3001/api/schedule');
+          const schedRes = await fetch(`${API_BASE_URL}/api/schedule`);
           const schedData = await schedRes.json();
           if (schedData.schedule) {
             setSchedule(schedData.schedule);
@@ -271,7 +274,7 @@ const Employer = () => {
     if (!newEmpName || !newEmpPass) return alert("Name and password required");
     setIsAdding(true);
     try {
-      const res = await fetch('http://localhost:3001/api/employees', {
+      const res = await fetch(`${API_BASE_URL}/api/employees`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newEmpName, password: newEmpPass, role: newEmpRole })
