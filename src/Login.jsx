@@ -47,6 +47,9 @@ const Login = () => {
     // Employer flow: if employer password provided and no name
     if (trimmedEmployer !== '' && trimmedName === '') {
       if (loginData.employerPassword && trimmedEmployer === loginData.employerPassword) {
+        // SAVE EMPLOYER DATA
+        const employerData = { name: 'Manager', role: 'employer' }; 
+        localStorage.setItem('currentUser', JSON.stringify(employerData));
         navigate('/employer');
       } else {
         alert('Invalid employer password');
@@ -66,16 +69,25 @@ const Login = () => {
       return;
     }
 
-    // If employee entry has a non-empty password, require it. Otherwise allow.
+    // Define a helper to save and go
+    const loginUser = () => {
+      // Create a user object to save. We include 'role: employee' just in case.
+      const userToSave = { ...match, role: 'employee' }; 
+      
+      localStorage.setItem('currentUser', JSON.stringify(userToSave)); // <--- SAVED HERE
+      navigate('/app');
+    };
+    
+  // Check password if it exists
     if (match.password && match.password !== '') {
       if (trimmedEmployee === match.password) {
-        navigate('/app');
+        loginUser(); // <--- Call helper
       } else {
         alert('Invalid employee password');
       }
     } else {
-      // no password required for this employee
-      navigate('/app');
+      // No password required
+      loginUser(); // <--- Call helper
     }
   };
 
