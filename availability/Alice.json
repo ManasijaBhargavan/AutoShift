@@ -6,42 +6,40 @@
     "Monday": {
       "unavailable": [],
       "preferred": [
-        "14:00-19:30"
+        "14:00-20:00"
       ]
     },
     "Tuesday": {
       "unavailable": [],
       "preferred": [
-        "10:00-13:30",
+        "13:00-13:30",
         "16:00-18:00"
       ]
     },
     "Wednesday": {
-      "unavailable": [
-      ],
+      "unavailable": [],
       "preferred": [
-        "10:00-13:30"
+        "13:00-13:30"
       ]
     },
     "Thursday": {
       "unavailable": [
+        "16:00-19:00"
       ],
       "preferred": []
     },
     "Friday": {
-      "unavailable": [
-      ],
+      "unavailable": [],
       "preferred": []
     },
     "Saturday": {
       "unavailable": [],
       "preferred": [
-        "10:30-13:30"
+        "13:00-13:30"
       ]
     },
     "Sunday": {
-      "unavailable": [
-      ],
+      "unavailable": [],
       "preferred": []
     }
   }

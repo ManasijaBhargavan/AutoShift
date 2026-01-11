@@ -159,8 +159,8 @@ def generate_output_json(solver, work, emp_data, all_roles, days):
     return output
 
 if __name__ == "__main__":
-    # Prefer directory 'avalibility' (per-person files). Fall back to example.json for compatibility.
-    employee_source = 'avalibility' if os.path.isdir('avalibility') else 'example.json'
+    # Prefer directory 'availability' (per-person files). Fall back to example.json for compatibility.
+    employee_source = 'availability' if os.path.isdir('availability') else 'example.json'
     result = solve_with_diagnostics(employee_source, 'customization.json')
     with open('schedule.json', 'w') as f:
         json.dump(result, f, indent=2)
