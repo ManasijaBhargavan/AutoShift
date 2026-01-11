@@ -1,0 +1,6 @@
+{
+  "name": "Bob",
+  "role": "Chef",
+  "max_hours": 40,
+  "availability": {}
+}

@@ -4,8 +4,9 @@
     {"username": "manager", "password": "manager-password"}
   ],
   "employees": [
-    { "name": "Alice", "password": "alicepass" },
-    { "name": "Bob", "password": "bobpass" },
-    { "name": "Charlie", "password" : "charliepass" }
+    { "name": "Alice", "password": "alicepass", "role" : "Server" },
+    { "name": "Bob", "password": "bobpass", "role" : "Chef" },
+    { "name": "Charlie", "password" : "charliepass",  "role" : "Busser" },
+    { "name": "Diana", "password" : "dianapass",  "role" : "Manager" }
   ]
 }

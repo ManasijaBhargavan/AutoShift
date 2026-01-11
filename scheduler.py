@@ -1,9 +1,44 @@
 import json
+import os
 from ortools.sat.python import cp_model
 
+
+def load_employees_from_dir(dirpath):
+        files = [p for p in os.listdir(dirpath) if p.lower().endswith('.json')]
+        employees = []
+        for fn in sorted(files):
+            try:
+                full = os.path.join(dirpath, fn)
+                with open(full, 'r') as f:
+                    data = json.load(f)
+                # If file contents are the full employee record, use it. Otherwise, build a record.
+                if isinstance(data, dict) and ('role' in data or 'availability' in data or 'max_hours' in data):
+                    emp = data.copy()
+                else:
+                    # Unexpected shape: skip
+                    continue
+                # Ensure name exists (use file base name if not present)
+                if 'name' not in emp or not emp['name']:
+                    emp['name'] = os.path.splitext(fn)[0]
+                # Ensure availability exists
+                if 'availability' not in emp:
+                    emp['availability'] = {}
+                # Ensure max_hours default
+                if 'max_hours' not in emp:
+                    emp['max_hours'] = emp.get('max_hours', 40)
+                employees.append(emp)
+            except Exception as e:
+                # skip invalid files
+                continue
+        return employees
+
 def solve_with_diagnostics(employee_file, config_file):
-    with open(employee_file, 'r') as f:
-        emp_data = json.load(f)['employee_data']
+    # employee_file may be a path to a single JSON (legacy) or a directory
+    if os.path.isdir(employee_file):
+        emp_data = load_employees_from_dir(employee_file)
+    else:
+        with open(employee_file, 'r') as f:
+            emp_data = json.load(f).get('employee_data', [])
     with open(config_file, 'r') as f:
         config = json.load(f)
 
@@ -124,6 +159,8 @@ def generate_output_json(solver, work, emp_data, all_roles, days):
     return output
 
 if __name__ == "__main__":
-    result = solve_with_diagnostics('example.json', 'customization.json')
+    # Prefer directory 'avalibility' (per-person files). Fall back to example.json for compatibility.
+    employee_source = 'avalibility' if os.path.isdir('avalibility') else 'example.json'
+    result = solve_with_diagnostics(employee_source, 'customization.json')
     with open('schedule.json', 'w') as f:
         json.dump(result, f, indent=2)
