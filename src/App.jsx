@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Check, X, Star, ChevronRight, Clock } from 'lucide-react';
+import { API_BASE_URL } from './config';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -38,7 +39,7 @@ const App = () => {
   // --- 1. NEW: Fetch Business Hours from Server API ---
   useEffect(() => {
     // UPDATED: Now fetches from the API endpoint, not the file directly
-    fetch('/api/customization')
+    fetch(`${API_BASE_URL}/api/customization`)
       .then(res => res.json())
       .then(data => {
         // Safe check in case data is missing
@@ -95,7 +96,7 @@ const App = () => {
 
       // Fetch Saved Availability from Server (Authoritative Load)
       // UPDATED URL: matches server.js
-      fetch(`/api/availability/${safeName}`)
+      fetch(`${API_BASE_URL}/api/availability/${safeName}`)
         .then(res => res.ok ? res.json() : null)
         .then(data => { if (data) applyAvailabilityData(data); })
         .catch(() => console.log("No saved availability found."));
@@ -132,7 +133,7 @@ const App = () => {
   const fetchSchedule = async (name) => {
     try {
       // UPDATED URL: matches server.js
-      const res = await fetch('http://localhost:3001/api/schedule');
+      const res = await fetch(`${API_BASE_URL}/api/schedule`);
       if (!res.ok) return;
       const payload = await res.json();
 
@@ -263,7 +264,7 @@ const App = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:3001/api/save-availability', {
+      const response = await fetch(`${API_BASE_URL}/api/save-availability`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(finalData),
