@@ -157,6 +157,17 @@ app.get('/api/availability/:safeName', async (req, res) => {
   }
 });
 
+const DIST_DIR = path.resolve(process.cwd(), 'dist'); // Vite builds to 'dist' folder
+
+// 1. Serve static files (js, css, images)
+app.use(express.static(DIST_DIR));
+
+// 2. Catch-all: If the request isn't an API call, send index.html
+// This allows React Router (e.g. /employer, /app) to work
+app.get('*', (req, res) => {
+  res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
+
 app.listen(PORT, ()=>{
   ensureAvailabilityFilesFromLogin().then(()=>{
     console.log(`Customization server running on http://localhost:${PORT}`);
