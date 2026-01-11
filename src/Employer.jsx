@@ -10,6 +10,8 @@ const PALETTE = [
 ];
 
 const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+// NEW: Define the roles available for global settings
+const ROLES = ['Server', 'Cook', 'Chef', 'Busser', 'Manager', 'Host', 'Bartender'];
 
 // --- LOGIC HELPER: Build Gantt Chart Rows ---
 function buildShiftsForDay(day) {
@@ -72,8 +74,8 @@ const Employer = () => {
   const [savedCustomization, setSavedCustomization] = useState({});
   const [schedule, setSchedule] = useState([]);
   
-  // New State for Demand Editor
-  const [demandDay, setDemandDay] = useState('Friday'); // Default to Friday as requested
+  const [demandDay, setDemandDay] = useState('Friday'); 
+  const [expandedHour, setExpandedHour] = useState(null); // Track which hour is expanded
 
   // Modal State
   const [showAddModal, setShowAddModal] = useState(false);
@@ -94,8 +96,9 @@ const Employer = () => {
       .then(j => {
         if (!mounted) return;
         if (j && !j.error) {
-          // Ensure demand object exists structure-wise
           if (!j.demand) j.demand = {};
+          // Ensure constraints exist
+          if (!j.constraints) j.constraints = {};
           setSavedCustomization(j);
           setDraftCustomization(j);
         }
@@ -134,7 +137,7 @@ const Employer = () => {
   const businessStart = savedCustomization.constraints?.business_hours?.start ?? 0;
   const businessEnd = savedCustomization.constraints?.business_hours?.end ?? 24;
   const businessSpan = Math.max(1, businessEnd - businessStart);
-  // Generate array of business hours [10, 11, 12...]
+  
   const businessHoursList = useMemo(() => {
     const start = draftCustomization.constraints?.business_hours?.start || 0;
     const end = draftCustomization.constraints?.business_hours?.end || 24;
@@ -161,20 +164,60 @@ const Employer = () => {
     setDraftCustomization(next);
   }
 
-  // NEW: Handle Demand Changes
-  function handleDemandChange(day, hour, delta) {
+  // NEW: Helper specifically for the Global Floor object
+  function handleGlobalFloorChange(role, val) {
     const next = JSON.parse(JSON.stringify(draftCustomization));
     
-    // Ensure structure exists
+    // Ensure the path exists and is an object
+    if (!next.constraints) next.constraints = {};
+    if (typeof next.constraints.global_staff_floor !== 'object') {
+      next.constraints.global_staff_floor = {};
+    }
+
+    const newVal = Math.max(0, val);
+    
+    if (newVal === 0) {
+      delete next.constraints.global_staff_floor[role];
+    } else {
+      next.constraints.global_staff_floor[role] = newVal;
+    }
+
+    setDraftCustomization(next);
+  }
+
+  // Handle Demand Changes (Global Total OR Specific Role)
+  function handleDemandChange(day, hour, delta, role = null, reset = false) {
+    const next = JSON.parse(JSON.stringify(draftCustomization));
+    
     if (!next.demand) next.demand = {};
     if (!next.demand[day]) next.demand[day] = {};
 
-    // Get current value or default to global floor
-    const currentVal = next.demand[day][hour] || next.constraints?.global_staff_floor || 1;
-    const newVal = Math.max(0, currentVal + delta);
+    // --- CASE 1: RESET ---
+    if (reset) {
+      delete next.demand[day][hour];
+      setDraftCustomization(next);
+      return;
+    }
 
-    // Save
-    next.demand[day][hour] = newVal;
+    // --- CASE 2: ROLE-SPECIFIC CHANGE ---
+    if (role) {
+      if (typeof next.demand[day][hour] !== 'object') {
+        next.demand[day][hour] = {}; 
+      }
+
+      const currentRoleVal = next.demand[day][hour][role] || 0; 
+      const newRoleVal = Math.max(0, currentRoleVal + delta);
+      
+      if (newRoleVal === 0) {
+        delete next.demand[day][hour][role]; 
+      } else {
+        next.demand[day][hour][role] = newRoleVal;
+      }
+      
+      if (Object.keys(next.demand[day][hour]).length === 0) {
+        delete next.demand[day][hour];
+      }
+    } 
     setDraftCustomization(next);
   }
 
@@ -226,27 +269,18 @@ const Employer = () => {
   async function handleAddEmployee(e) {
     e.preventDefault();
     if (!newEmpName || !newEmpPass) return alert("Name and password required");
-    
     setIsAdding(true);
     try {
       const res = await fetch('http://localhost:3001/api/employees', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: newEmpName,
-          password: newEmpPass,
-          role: newEmpRole
-        })
+        body: JSON.stringify({ name: newEmpName, password: newEmpPass, role: newEmpRole })
       });
-      
       const data = await res.json();
-      
       if (res.ok) {
         alert(`✅ Employee "${newEmpName}" created successfully!`);
         setShowAddModal(false);
-        setNewEmpName('');
-        setNewEmpPass('');
-        setNewEmpRole('Server');
+        setNewEmpName(''); setNewEmpPass(''); setNewEmpRole('Server');
       } else {
         alert(`❌ Error: ${data.error}`);
       }
@@ -271,31 +305,15 @@ const Employer = () => {
             <span className="text-xs text-slate-500 uppercase tracking-wider">Admin View</span>
           </div>
         </div>
-
-        {/* Actions */}
         <div className="flex gap-4">
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-md transition-all shadow-md shadow-emerald-200"
-          >
+          <button onClick={() => setShowAddModal(true)} className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-md transition-all shadow-md shadow-emerald-200">
             <UserPlus size={16} /> New Employee
           </button>
-
           <div className="flex bg-slate-100 p-1 rounded-lg">
-            <button
-              onClick={() => setActiveTab('visualizer')}
-              className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md transition-all ${
-                activeTab === 'visualizer' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-              }`}
-            >
+            <button onClick={() => setActiveTab('visualizer')} className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md transition-all ${activeTab === 'visualizer' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
               <Calendar size={16} /> Schedule
             </button>
-            <button
-              onClick={() => setActiveTab('settings')}
-              className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md transition-all ${
-                activeTab === 'settings' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-              }`}
-            >
+            <button onClick={() => setActiveTab('settings')} className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md transition-all ${activeTab === 'settings' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
               <Sliders size={16} /> Configuration
             </button>
           </div>
@@ -310,26 +328,14 @@ const Employer = () => {
           <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
-                <button 
-                  onClick={() => setDayIndex(Math.max(0, dayIndex - 1))}
-                  disabled={dayIndex === 0}
-                  className="p-2 rounded-full hover:bg-slate-100 disabled:opacity-30 transition-colors"
-                >
+                <button onClick={() => setDayIndex(Math.max(0, dayIndex - 1))} disabled={dayIndex === 0} className="p-2 rounded-full hover:bg-slate-100 disabled:opacity-30 transition-colors">
                   <ChevronLeft size={20} />
                 </button>
                 <div className="text-center">
-                  <h2 className="text-xl font-bold text-slate-800">
-                    {days[dayIndex]?.day || "Loading Schedule..."}
-                  </h2>
-                  <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">
-                    Business Hours: {businessStart}:00 - {businessEnd}:00
-                  </p>
+                  <h2 className="text-xl font-bold text-slate-800">{days[dayIndex]?.day || "Loading Schedule..."}</h2>
+                  <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">Business Hours: {businessStart}:00 - {businessEnd}:00</p>
                 </div>
-                <button 
-                  onClick={() => setDayIndex(Math.min(days.length - 1, dayIndex + 1))}
-                  disabled={dayIndex >= days.length - 1}
-                  className="p-2 rounded-full hover:bg-slate-100 disabled:opacity-30 transition-colors"
-                >
+                <button onClick={() => setDayIndex(Math.min(days.length - 1, dayIndex + 1))} disabled={dayIndex >= days.length - 1} className="p-2 rounded-full hover:bg-slate-100 disabled:opacity-30 transition-colors">
                   <ChevronRight size={20} />
                 </button>
               </div>
@@ -353,17 +359,11 @@ const Employer = () => {
                 </div>
 
                 <div className="space-y-4">
-                  {lanes.length === 0 && (
-                    <div className="text-center py-10 text-slate-400 italic bg-slate-50 rounded-lg">
-                      No shifts assigned for this day.
-                    </div>
-                  )}
+                  {lanes.length === 0 && <div className="text-center py-10 text-slate-400 italic bg-slate-50 rounded-lg">No shifts assigned for this day.</div>}
                   {lanes.map((roleObj, idx) => (
                     <div key={idx} className="flex">
                       <div className="w-40 pr-4 flex items-center">
-                        <div className="font-semibold text-sm text-slate-700 bg-slate-50 px-3 py-2 rounded w-full border border-slate-100">
-                          {roleObj.role}
-                        </div>
+                        <div className="font-semibold text-sm text-slate-700 bg-slate-50 px-3 py-2 rounded w-full border border-slate-100">{roleObj.role}</div>
                       </div>
                       <div className="flex-1 relative">
                         <div className="absolute inset-0 pointer-events-none">
@@ -372,30 +372,23 @@ const Employer = () => {
                             return <div key={idx} style={{ left: `${leftPct}%` }} className="absolute top-0 bottom-0 w-px bg-slate-50 border-r border-dashed border-slate-200"></div>
                           })}
                         </div>
-                        {roleObj.lanes.map((subLane, laneIdx) => {
-                          return (
-                            <div key={laneIdx} style={{ height: 40 }} className="relative mb-2">
-                              {subLane.map((s, j) => {
-                                const sStart = Math.max(s.start, businessStart);
-                                const sEnd = Math.min(s.end, businessEnd);
-                                if (sEnd <= sStart) return null;
-                                const left = ((sStart - businessStart) / businessSpan) * 100;
-                                const width = ((sEnd - sStart) / businessSpan) * 100;
-                                const bg = nameToColor[s.name] || '#94a3b8';
-                                return (
-                                  <div
-                                    key={j}
-                                    title={`${s.name} (${s.start}:00 - ${s.end}:00)`}
-                                    style={{ left: `${left}%`, width: `${width}%`, backgroundColor: bg }}
-                                    className="absolute top-0 bottom-0 rounded-md shadow-sm border border-white/20 flex items-center justify-center text-white text-xs font-bold px-2 overflow-hidden whitespace-nowrap hover:brightness-110 transition-all cursor-default z-10"
-                                  >
-                                    {s.name}
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          );
-                        })}
+                        {roleObj.lanes.map((subLane, laneIdx) => (
+                          <div key={laneIdx} style={{ height: 40 }} className="relative mb-2">
+                            {subLane.map((s, j) => {
+                              const sStart = Math.max(s.start, businessStart);
+                              const sEnd = Math.min(s.end, businessEnd);
+                              if (sEnd <= sStart) return null;
+                              const left = ((sStart - businessStart) / businessSpan) * 100;
+                              const width = ((sEnd - sStart) / businessSpan) * 100;
+                              const bg = nameToColor[s.name] || '#94a3b8';
+                              return (
+                                <div key={j} title={`${s.name} (${s.start}:00 - ${s.end}:00)`} style={{ left: `${left}%`, width: `${width}%`, backgroundColor: bg }} className="absolute top-0 bottom-0 rounded-md shadow-sm border border-white/20 flex items-center justify-center text-white text-xs font-bold px-2 overflow-hidden whitespace-nowrap hover:brightness-110 transition-all cursor-default z-10">
+                                  {s.name}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ))}
@@ -414,15 +407,9 @@ const Employer = () => {
                 <p className="text-slate-500 mt-1">Define global constraints for the scheduling algorithm.</p>
               </div>
               <div className="flex gap-3">
-                <button onClick={copyJson} className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors">
-                  <Copy size={16} /> Copy JSON
-                </button>
-                <button onClick={downloadJson} className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors">
-                  <Download size={16} /> Download
-                </button>
-                <button onClick={saveToServer} className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium shadow-md shadow-indigo-200 transition-all">
-                  <Save size={18} /> Save & Regenerate
-                </button>
+                <button onClick={copyJson} className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors"><Copy size={16} /> Copy JSON</button>
+                <button onClick={downloadJson} className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors"><Download size={16} /> Download</button>
+                <button onClick={saveToServer} className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium shadow-md shadow-indigo-200 transition-all"><Save size={18} /> Save & Regenerate</button>
               </div>
             </div>
 
@@ -446,9 +433,27 @@ const Employer = () => {
                         <label className="text-sm font-semibold text-slate-700">Daily Max Hours</label>
                         <input type="number" value={draftCustomization.constraints?.daily_max_hours || ''} onChange={e => applyStructuredChange('constraints.daily_max_hours', Number(e.target.value))} className="w-20 border rounded px-2 py-1 text-right" />
                      </div>
-                     <div className="flex justify-between items-center">
-                        <label className="text-sm font-semibold text-slate-700">Global Staff Floor</label>
-                        <input type="number" value={draftCustomization.constraints?.global_staff_floor || ''} onChange={e => applyStructuredChange('constraints.global_staff_floor', Number(e.target.value))} className="w-20 border rounded px-2 py-1 text-right" />
+
+                     {/* STEP 3 CHANGE: Replaced "Global Staff Floor" single input with ROLE-BASED FLOORS */}
+                     <div className="pt-2 border-t border-slate-200 mt-2">
+                       <label className="text-sm font-bold text-slate-700 block mb-2">Global Minimum Staffing</label>
+                       <div className="grid grid-cols-2 gap-2">
+                         {ROLES.map(role => {
+                           const floorData = draftCustomization.constraints?.global_staff_floor;
+                           const currentVal = (typeof floorData === 'object' ? floorData?.[role] : 0) || 0;
+
+                           return (
+                             <div key={role} className="flex justify-between items-center bg-white border border-slate-200 p-2 rounded">
+                               <span className="text-xs font-semibold text-slate-600">{role}</span>
+                               <div className="flex items-center gap-1">
+                                  <button onClick={() => handleGlobalFloorChange(role, currentVal - 1)} className="w-5 h-5 flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded text-slate-600">-</button>
+                                  <span className="text-xs font-bold w-4 text-center">{currentVal}</span>
+                                  <button onClick={() => handleGlobalFloorChange(role, currentVal + 1)} className="w-5 h-5 flex items-center justify-center bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded">+</button>
+                               </div>
+                             </div>
+                           );
+                         })}
+                       </div>
                      </div>
                   </div>
                 </div>
@@ -471,61 +476,94 @@ const Employer = () => {
                 </div>
               </div>
 
-              {/* --- 2. HOURLY DEMAND OVERRIDES (NEW SECTION) --- */}
+              {/* --- 2. HOURLY DEMAND OVERRIDES --- */}
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="flex items-center gap-2 text-lg font-bold text-slate-800">
                     <BarChart3 className="text-indigo-500" size={20}/> Hourly Demand
                   </h3>
-                  {/* Day Selector */}
-                  <select 
-                    value={demandDay} 
-                    onChange={e => setDemandDay(e.target.value)}
-                    className="border border-slate-300 rounded-lg px-3 py-1 text-sm font-semibold outline-none focus:ring-2 focus:ring-indigo-500"
-                  >
+                  <select value={demandDay} onChange={e => setDemandDay(e.target.value)} className="border border-slate-300 rounded-lg px-3 py-1 text-sm font-semibold outline-none focus:ring-2 focus:ring-indigo-500">
                     {DAYS_OF_WEEK.map(d => <option key={d} value={d}>{d}</option>)}
                   </select>
                 </div>
 
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 max-h-[500px] overflow-y-auto">
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 max-h-[600px] overflow-y-auto">
                    <p className="text-xs text-slate-500 mb-4">
-                     Set the <strong>minimum required staff</strong> for specific hours on {demandDay}. 
-                     Default is {draftCustomization.constraints?.global_staff_floor || 1}.
+                     Click on an hour to set <strong>role-specific requirements</strong> (e.g., 2 Servers, 1 Cook).
                    </p>
                    
-                   <div className="space-y-2">
+                   <div className="space-y-3">
+                     {/* STEP 4 CHANGE: Updated display logic for list items */}
                      {businessHoursList.map(hour => {
-                       // Get specific demand value if exists, else global floor
-                       const specificVal = draftCustomization.demand?.[demandDay]?.[hour];
-                       const displayVal = specificVal !== undefined ? specificVal : (draftCustomization.constraints?.global_staff_floor || 1);
-                       const isModified = specificVal !== undefined;
+                       const hourData = draftCustomization.demand?.[demandDay]?.[hour];
+                       const isModified = hourData !== undefined && Object.keys(hourData).length > 0;
+                       const isExpanded = expandedHour === hour;
+                       
+                       // Calculate summary string
+                       let summary = [];
+                       if (isModified) {
+                         if (typeof hourData === 'object') {
+                           Object.entries(hourData).forEach(([r, count]) => summary.push(`${count} ${r}`));
+                         }
+                       } else {
+                         // Show defaults
+                         const globalFloors = draftCustomization.constraints?.global_staff_floor;
+                         if (typeof globalFloors === 'object' && globalFloors !== null) {
+                           Object.entries(globalFloors).forEach(([r, count]) => {
+                             if (count > 0) summary.push(`${count} ${r}`);
+                           });
+                         }
+                         if (summary.length === 0) summary.push("No minimums");
+                       }
 
                        return (
-                         <div key={hour} className={`flex items-center justify-between p-3 rounded-lg border ${isModified ? 'bg-white border-indigo-200 shadow-sm' : 'border-transparent hover:bg-white hover:border-slate-200'}`}>
-                           <div className="flex items-center gap-3">
-                             <div className="text-sm font-bold text-slate-700 w-12">{hour}:00</div>
-                             {isModified && <span className="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-bold">Custom</span>}
-                           </div>
+                         <div key={hour} className={`rounded-lg border transition-all ${isExpanded ? 'bg-white border-indigo-300 ring-2 ring-indigo-50 shadow-md' : 'border-transparent hover:bg-white hover:border-slate-200'}`}>
                            
-                           <div className="flex items-center gap-3">
-                             <button 
-                               onClick={() => handleDemandChange(demandDay, hour, -1)}
-                               className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 transition-colors"
-                             >
-                               <Minus size={14} />
-                             </button>
-                             
-                             <span className={`w-6 text-center font-bold ${isModified ? 'text-indigo-600' : 'text-slate-400'}`}>
-                               {displayVal}
-                             </span>
-
-                             <button 
-                               onClick={() => handleDemandChange(demandDay, hour, 1)}
-                               className="w-8 h-8 flex items-center justify-center rounded-full bg-indigo-100 hover:bg-indigo-200 text-indigo-600 transition-colors"
-                             >
-                               <Plus size={14} />
-                             </button>
+                           {/* HEADER ROW */}
+                           <div onClick={() => setExpandedHour(isExpanded ? null : hour)} className="flex items-center justify-between p-3 cursor-pointer">
+                             <div className="flex items-center gap-3">
+                               <div className="text-sm font-bold text-slate-700 w-16">{hour}:00</div>
+                               {/* Badge showing summary */}
+                               {isModified ? (
+                                 <div className="flex gap-1 flex-wrap">
+                                   {summary.map((s, i) => <span key={i} className="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-bold">{s}</span>)}
+                                 </div>
+                               ) : (
+                                 <span className="text-xs text-slate-400 italic">
+                                   {summary.join(', ')} (Default)
+                                 </span>
+                               )}
+                             </div>
+                             <div className="flex items-center gap-2">
+                               {isModified && (
+                                 <button onClick={(e) => { e.stopPropagation(); handleDemandChange(demandDay, hour, 0, null, true); }} className="p-1 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded transition-colors" title="Reset to default">
+                                   <X size={14} />
+                                 </button>
+                               )}
+                               <ChevronRight size={16} className={`text-slate-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                             </div>
                            </div>
+
+                           {/* EXPANDED CONTENT (Role Editors) */}
+                           {isExpanded && (
+                             <div className="px-4 pb-4 pt-0 border-t border-slate-100 mt-1">
+                               <div className="grid grid-cols-2 gap-2 mt-3">
+                                 {ROLES.map(role => {
+                                   const currentCount = (typeof hourData === 'object' ? hourData?.[role] : 0) || 0;
+                                   return (
+                                     <div key={role} className="flex items-center justify-between bg-slate-50 p-2 rounded border border-slate-100">
+                                       <span className="text-xs font-semibold text-slate-600">{role}</span>
+                                       <div className="flex items-center gap-2">
+                                         <button onClick={() => handleDemandChange(demandDay, hour, -1, role)} className={`w-6 h-6 flex items-center justify-center rounded hover:bg-slate-200 ${currentCount > 0 ? 'text-slate-700' : 'text-slate-300'}`}><Minus size={12} /></button>
+                                         <span className={`text-xs font-bold w-4 text-center ${currentCount > 0 ? 'text-indigo-600' : 'text-slate-300'}`}>{currentCount}</span>
+                                         <button onClick={() => handleDemandChange(demandDay, hour, 1, role)} className="w-6 h-6 flex items-center justify-center rounded hover:bg-indigo-100 text-indigo-600"><Plus size={12} /></button>
+                                       </div>
+                                     </div>
+                                   );
+                                 })}
+                               </div>
+                             </div>
+                           )}
                          </div>
                        )
                      })}
@@ -538,7 +576,7 @@ const Employer = () => {
         )}
       </div>
 
-      {/* --- ADD EMPLOYEE MODAL (Hidden by default) --- */}
+      {/* --- ADD EMPLOYEE MODAL --- */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative">
@@ -556,7 +594,7 @@ const Employer = () => {
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-1">Role</label>
                 <select value={newEmpRole} onChange={e => setNewEmpRole(e.target.value)} className="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
-                  <option value="Server">Server</option><option value="Chef">Chef</option><option value="Cook">Cook</option><option value="Busser">Busser</option><option value="Manager">Manager</option><option value="Host">Host</option><option value="Bartender">Bartender</option>
+                  {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
                 </select>
               </div>
               <div className="pt-4 flex justify-end gap-3">
