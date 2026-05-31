@@ -74,7 +74,7 @@ app.post('/api/customization', async (req, res) => {
 
     // Using VENV_PYTHON for consistency
     console.log("Triggering scheduler...");
-    exec(`${VENV_PYTHON} scheduler.py`, { cwd: process.cwd(), timeout: 120000 }, (err, stdout, stderr) => {
+    exec(`./.venv/bin/python3 scheduler.py`, { cwd: process.cwd(), timeout: 120000 }, (err, stdout, stderr) => {
       if (err) console.error('Background Scheduler Error:', stderr || err);
       else console.log('Background Scheduler Finished Successfully');
     });
@@ -94,7 +94,7 @@ app.post('/api/save-availability', async (req, res) => {
     await fs.writeFile(target, JSON.stringify(body, null, 2), 'utf8');
 
     // Using VENV_PYTHON
-    exec(`${VENV_PYTHON} scheduler.py`, { cwd: process.cwd(), timeout: 120000 }, async (err, stdout, stderr) => {
+    exec(`./.venv/bin/python3 scheduler.py`, { cwd: process.cwd(), timeout: 120000 }, async (err, stdout, stderr) => {
       if (err) {
         console.error('Scheduler error:', err, stderr);
         return res.status(500).json({ error: 'Saved but scheduler failed', details: stderr || String(err) });
@@ -133,13 +133,22 @@ app.post('/api/employees', async (req, res) => {
   if (!name || !password || !role) return res.status(400).json({ error: 'Missing name, password, or role' });
 
   try {
+    // For hashing passwords
+    const bcrypt = require('bcrypt');
+    const SALT_ROUNDS = 12;  // Higher = slower to brute-force
+
+    // Pull employee data from the json file
     const loginTxt = await fs.readFile(LOGIN_PATH, 'utf8');
     const loginData = JSON.parse(loginTxt || '{"employees":[]}');
-
+    
+    // Check if employee already esists
     if (loginData.employees.find(e => e.name.toLowerCase() === name.toLowerCase())) {
       return res.status(409).json({ error: 'Employee exists' });
     }
-    loginData.employees.push({ name, password, role });
+
+    // Encrypt password
+    const hast = await bcrypt.hash(password, SALT_ROUNDS);
+    loginData.employees.push({ name, hash, role });
     await fs.writeFile(LOGIN_PATH, JSON.stringify(loginData, null, 2), 'utf8');
 
     // Create default availability file

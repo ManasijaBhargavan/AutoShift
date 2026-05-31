@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import bcrypt from 'bcryptjs';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -25,7 +26,7 @@ const Login = () => {
     fetchData();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (loading || fetchError || !loginData) {
@@ -42,16 +43,16 @@ const Login = () => {
     }
 
     // 1. Check Employer List (Admins)
-    const employerMatch = (loginData.employers || []).find(
-      emp => emp.username.toLowerCase() === u && emp.password === p
+    const employer = (loginData.employers || []).find( 
+      emp => emp.username.toLowerCase() === u 
     );
 
-    if (employerMatch) {
+    if (employer && await bcrypt.compare(p, employer.password)) {
       // Pass the username to the employer dashboard if needed
       const userToSave = { 
-        name: employerMatch.username, 
+        name: employer.username, 
         role: 'employer',
-        ...employerMatch 
+        ...employer 
       };
       localStorage.setItem('currentUser', JSON.stringify(userToSave));
       navigate('/employer');
@@ -59,19 +60,21 @@ const Login = () => {
     }
 
     // 2. Check Employee List
-    const employeeMatch = (loginData.employees || []).find(
-      emp => emp.name.toLowerCase() === u && emp.password === p
+    const employee = (loginData.employees || []).find(
+      emp => emp.name.toLowerCase() === u
     );
 
-    if (employeeMatch) {
+    if (employee && bcrypt.compare(p, employee.password)) {
       const userToSave = { 
         role: 'employee', 
-        ...employeeMatch // This includes .name, .id, etc.
+        ...employee // This includes .name, .id, etc.
       };
       localStorage.setItem('currentUser', JSON.stringify(userToSave));
       navigate('/app');
       return;
     }
+
+    // Maybe add a dummy bcrypt.compare so that timing even if no matching username
 
     alert('Invalid username or password.');
   };
